@@ -1,6 +1,10 @@
+#ifndef OBJECTSTORAGE_H
+#define OBJECTSTORAGE_H
+
 #include <iostream>
 #include <vector>
-#include <mutex>          // std::mutex, std::lock
+#include <mutex>
+#include <memory>
 
 using namespace std;
 /*
@@ -8,27 +12,41 @@ using namespace std;
 */
 
 class Object {
+    int id;
     string name;
     double data;
     bool isValid;
-public:
+
+private:
+    // Forbid this constructor by making it private
+    // Objects must be created by createObject methods
+    Object() {
+        this->name = "";
+        this->data = 0;
+        this->isValid = true;
+    }  
+ 
     Object(string name, double data) {
         this->name = name;
         this->data = data;
         this->isValid = true;
     }
 
+public:
+    int getId       () { return this->id; }
     string getName  () { return this->name; }
     double getData  () { return this->data;  }
     bool getIsValid () { return this->isValid; }
+    void setId    (int id) { this->id = id; }
     void setName  (string name) { this->name = name; }
     void setData  (double data) { this->data = data;  }
     void setIsValid (bool isValid) { this->isValid = isValid; }
 
-private:
-    // Disallow creation of objects without parameters
-    Object() {}  
+    friend std::unique_ptr<Object> createObject(string name, double data);
+    friend std::unique_ptr<Object> createObject();
+   // Disallow creation of objects without parameters
 };
+
 
 class ObjectStorage {
 
@@ -37,8 +55,19 @@ private:
 
     // Use a lock when mutating objects vector
     std::mutex objectsMutex;
-    ObjectStorage();
 public:
-    bool registerForTracking(Object *obj);
+    ObjectStorage();
+    bool registerForTracking(std::unique_ptr<Object>);
     bool removeFromTracking (Object *obj);
+    bool print();
+
+    static ObjectStorage *object_storage;
+    static ObjectStorage *getInstance() {
+        if (object_storage == nullptr) {
+            object_storage = new ObjectStorage();
+        }
+        return object_storage;
+    } 
 };
+
+#endif

@@ -3,10 +3,18 @@
 
 using namespace std;
 
-bool ObjectStorage::registerForTracking(Object *obj) {
+// For sake of creating singletons
+ObjectStorage *ObjectStorage ::object_storage = nullptr;
+
+
+ObjectStorage::ObjectStorage() {
+    cout << "Calling constructor of ObjectStorage " << endl;
+}
+
+bool ObjectStorage::registerForTracking(std::unique_ptr<Object> obj) {
     // Lock the objects vector
     objectsMutex.lock();
-    objects.push_back(obj);
+    objects.push_back(obj.get());
     objectsMutex.unlock();
     return true;
 }
@@ -28,4 +36,9 @@ bool ObjectStorage::removeFromTracking(Object *obj) {
     }
     return true;
 
+}
+
+
+bool ObjectStorage::print() {
+    return true;
 }

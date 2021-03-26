@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "ObjectStorage.h"
 using namespace std;
 
 class Record {
@@ -19,23 +20,8 @@ public:
     hrtime start_timestamp;
     hrtime end_timestamp;
     static int internal_level;
-    Record(string _name) {
-        name = _name;
-        start_timestamp = gethrtime();
-        internal_level++;
-        for (int i=0; i<internal_level; i++) {
-            cout <<"--";
-        }
-        cout << "Begin scope "<< name << endl;
-    }
-    ~Record() {
-        end_timestamp = gethrtime();
-        for (int i=0; i<internal_level; i++) {
-          cout <<"--";
-        }
-        cout << "The time taken in scope " << name << " is " << end_timestamp - start_timestamp << endl;
-        internal_level--;
-    }
+    Record(string _name); 
+    ~Record(); 
 private:
     Record() {}
 
