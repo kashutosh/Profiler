@@ -17,13 +17,13 @@ private:
 
     // Use a lock when mutating objects vector
     std::mutex objectsMutex;
-public:
     ObjectStorage();
+    static ObjectStorage *object_storage;
+public:
     bool registerForTracking(std::unique_ptr<Object>);
     bool removeFromTracking (int idToRemove);
     bool print();
 
-    static ObjectStorage *object_storage;
     static ObjectStorage *getInstance() {
         if (object_storage == nullptr) {
             object_storage = new ObjectStorage();
