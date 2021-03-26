@@ -30,5 +30,5 @@ private:
 int Record::internal_level = 0;
 
 
-#define PROF_SCOPE(number, name) Record r##number(name)
+#define SCOPE_TIMER(number, name) Record r##number(name)
 

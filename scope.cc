@@ -33,23 +33,23 @@ Record::~Record() {
 }
 
 void f() {
-     PROF_SCOPE(1, "F_Scope");
+     SCOPE_TIMER(1, "F_Scope");
      cout << "Inside function f\n";
 }
 
 int main() {
     {
 
-        PROF_SCOPE(1, "main");
+        SCOPE_TIMER(1, "main");
         cout << "Some Random instructions\n";
 
-        PROF_SCOPE(2, "inner");
+        SCOPE_TIMER(2, "inner");
 
 
         for (int i=0;i<2;i++) {
             cout << "This is some random line\n";
         }
-        PROF_SCOPE(3, "outscope");
+        SCOPE_TIMER(3, "outscope");
         f();
         ObjectStorage *os = ObjectStorage::getInstance();
         os->print();
