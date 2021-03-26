@@ -73,6 +73,8 @@ public:
         }
         return object_storage;
     } 
+
+    bool emptyObjectStorage();
 };
 
 #endif

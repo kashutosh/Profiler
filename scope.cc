@@ -57,4 +57,5 @@ int main() {
     }
     ObjectStorage *os = ObjectStorage::getInstance();
     os->print();
+    os->emptyObjectStorage();
 }

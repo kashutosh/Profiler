@@ -50,3 +50,17 @@ bool ObjectStorage::print() {
 
     return true;
 }
+
+
+bool ObjectStorage::emptyObjectStorage() {
+    cout << "--------------------------------------------------" << endl;
+    cout << "Emptying ObjectStorage " << endl;
+    for (vector<unique_ptr<Object> >::iterator it = objects.begin();
+         it!= objects.end(); it++) {
+        Object *current = it->get();
+        //cout << "Deleting: " << current->getName() << ", Data: " << current->getData() << endl;
+        Object *releasePtr = it->release();
+        delete releasePtr;
+    }
+    return true;
+}
