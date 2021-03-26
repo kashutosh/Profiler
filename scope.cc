@@ -59,5 +59,14 @@ int main() {
     os->removeFromTracking(1);
     os->removeFromTracking(2);
     os->print();
+
+    std::unique_ptr<Object> ptr1(createObject("object2", 99));
+    os->registerForTracking(std::move(ptr1));
+    std::unique_ptr<Object> ptr2(createObject("object2", 100));
+    os->registerForTracking(std::move(ptr2));
+    std::unique_ptr<Object> ptr3(createObject("object2", 101));
+    os->registerForTracking(std::move(ptr3));
+
+
     os->emptyObjectStorage();
 }

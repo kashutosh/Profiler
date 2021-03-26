@@ -15,6 +15,7 @@ bool ObjectStorage::registerForTracking(std::unique_ptr<Object> obj) {
     // Lock the objects vector
     objectsMutex.lock();
     int id = this->objects.size() + 1;
+    cout << "Registering object with id: " << id << " and data " << obj.get()->getData() << endl;
     obj.get()->setId(id);
     objects.push_back(std::move(obj));
     objectsMutex.unlock();
@@ -67,7 +68,7 @@ bool ObjectStorage::emptyObjectStorage() {
     cout << "Emptying ObjectStorage " << endl;
     for (vector<unique_ptr<Object> >::iterator it = objects.begin();
          it!= objects.end(); it++) {
-        Object *current = it->get();
+        //Object *current = it->get();
         //cout << "Deleting: " << current->getName() << ", Data: " << current->getData() << endl;
         Object *releasePtr = it->release();
         delete releasePtr;

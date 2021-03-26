@@ -3,7 +3,7 @@
 using namespace std;
 
 Object::~Object() {
-    cout << "Deleting object with data " << data << endl;
+    cout << "Deleting object with id: " << id << " and data " << data << endl;
 }
 
 // Question is how to call this function?
