@@ -1,0 +1,9 @@
+A simple flight recorder.
+
+This flight recorder can tract a double precision number.
+The illustatration with scope.cc is for showing prof_scope.
+
+Create an "Object" whenever you have a data item to track.
+
+Author: Ashutosh Kulkarni
+
