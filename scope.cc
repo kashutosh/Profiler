@@ -56,6 +56,8 @@ int main() {
 
     }
     ObjectStorage *os = ObjectStorage::getInstance();
+    os->removeFromTracking(1);
+    os->removeFromTracking(2);
     os->print();
     os->emptyObjectStorage();
 }

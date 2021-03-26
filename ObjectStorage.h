@@ -63,7 +63,7 @@ private:
 public:
     ObjectStorage();
     bool registerForTracking(std::unique_ptr<Object>);
-    bool removeFromTracking (Object *obj);
+    bool removeFromTracking (int idToRemove);
     bool print();
 
     static ObjectStorage *object_storage;
