@@ -20,19 +20,24 @@ class Object {
 private:
     // Forbid this constructor by making it private
     // Objects must be created by createObject methods
-    Object() {
+    Object() = delete;
+    /*{
+        cout << "Creating object with data " << data << endl;
         this->name = "";
         this->data = 0;
         this->isValid = true;
-    }  
+    } */ 
  
     Object(string name, double data) {
+        cout << "Creating object with data " << data << endl;
         this->name = name;
         this->data = data;
         this->isValid = true;
     }
 
 public:
+
+    ~Object();
     int getId       () { return this->id; }
     string getName  () { return this->name; }
     double getData  () { return this->data;  }
@@ -43,7 +48,7 @@ public:
     void setIsValid (bool isValid) { this->isValid = isValid; }
 
     friend std::unique_ptr<Object> createObject(string name, double data);
-    friend std::unique_ptr<Object> createObject();
+    std::unique_ptr<Object> createObject() = delete;
    // Disallow creation of objects without parameters
 };
 
@@ -51,7 +56,7 @@ public:
 class ObjectStorage {
 
 private:
-    vector<Object *> objects;
+    vector<unique_ptr<Object> > objects;
 
     // Use a lock when mutating objects vector
     std::mutex objectsMutex;

@@ -14,7 +14,7 @@ ObjectStorage::ObjectStorage() {
 bool ObjectStorage::registerForTracking(std::unique_ptr<Object> obj) {
     // Lock the objects vector
     objectsMutex.lock();
-    objects.push_back(obj.get());
+    objects.push_back(std::move(obj));
     objectsMutex.unlock();
     return true;
 }
@@ -25,7 +25,7 @@ bool ObjectStorage::removeFromTracking(Object *obj) {
 
 
     // Caution: objects is mutating in code below
-    for (vector<Object *>::iterator it = objects.begin();
+    /*for (vector<Object *>::iterator it = objects.begin();
          it!= objects.end(); it++) {
         Object *current = *it;
         if (obj->getName() == current->getName()) {
@@ -33,12 +33,20 @@ bool ObjectStorage::removeFromTracking(Object *obj) {
             current->setIsValid (false);
             objectsMutex.unlock();
         }
-    }
+    }*/
     return true;
 
 }
 
 
 bool ObjectStorage::print() {
+    cout << "--------------------------------------------------" << endl;
+    cout << "Printing ObjectStorage " << endl;
+    for (vector<unique_ptr<Object> >::iterator it = objects.begin();
+         it!= objects.end(); it++) {
+        Object *current = it->get();
+        cout << "Name: " << current->getName() << ", Data: " << current->getData() << endl;
+    }
+
     return true;
 }

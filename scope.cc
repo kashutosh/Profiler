@@ -23,10 +23,11 @@ Record::~Record() {
     }
     cout << "The time taken in scope " << name << " is " << end_timestamp - start_timestamp << endl;
 
-    std::unique_ptr<Object> ptr(createObject("object1", 1));
+    std::unique_ptr<Object> ptr(createObject("object1", end_timestamp - start_timestamp));
     ObjectStorage *os = ObjectStorage::getInstance();
 
     // handover the ownership of this pointer to ObjectStorage
+    // std::move invokes a destructor on created object
     os->registerForTracking(std::move(ptr));
     internal_level--;
 }
@@ -39,14 +40,21 @@ void f() {
 int main() {
     {
 
-        ObjectStorage profile_objects;
         PROF_SCOPE(1, "main");
         cout << "Some Random instructions\n";
+
         PROF_SCOPE(2, "inner");
+
+
         for (int i=0;i<2;i++) {
             cout << "This is some random line\n";
         }
         PROF_SCOPE(3, "outscope");
         f();
+        ObjectStorage *os = ObjectStorage::getInstance();
+        os->print();
+
     }
+    ObjectStorage *os = ObjectStorage::getInstance();
+    os->print();
 }
