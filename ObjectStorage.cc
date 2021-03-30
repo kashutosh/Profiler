@@ -15,7 +15,7 @@ bool ObjectStorage::registerForTracking(std::unique_ptr<Object> obj) {
     // Lock the objects vector
     objectsMutex.lock();
     int id = this->objects.size() + 1;
-    cout << "Registering object with id: " << id << " and data " << obj.get()->getData() << endl;
+    cout << "Registering object with name: " << obj->getName() << endl;
     obj.get()->setId(id);
     objects.push_back(std::move(obj));
     objectsMutex.unlock();
@@ -32,7 +32,6 @@ bool ObjectStorage::removeFromTracking(int idToRemove) {
          it!= objects.end(); it++) {
         Object *current = it->get();
         if (current->getId() == idToRemove) {
-            //cout << "Deleting: " << current->getName() << ", Data: " << current->getData() << endl;
             objectsMutex.lock();
             current->setIsValid(false);
             // One can always delete objects pointed by storage
@@ -55,7 +54,7 @@ bool ObjectStorage::print() {
          it!= objects.end(); it++) {
         Object *current = it->get();
         if (current->getIsValid()) {
-            cout << "Name: " << current->getName() << ", Data: " << current->getData() << endl;
+            cout << "Name: " << current->getName() << endl;
         }
     }
 
@@ -68,8 +67,8 @@ bool ObjectStorage::emptyObjectStorage() {
     cout << "Emptying ObjectStorage " << endl;
     for (vector<unique_ptr<Object> >::iterator it = objects.begin();
          it!= objects.end(); it++) {
-        //Object *current = it->get();
-        //cout << "Deleting: " << current->getName() << ", Data: " << current->getData() << endl;
+        Object *current = it->get();
+        cout << "Deleting: " << current->getName() << endl;
         Object *releasePtr = it->release();
         delete releasePtr;
     }

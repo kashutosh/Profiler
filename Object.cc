@@ -3,14 +3,14 @@
 using namespace std;
 
 Object::~Object() {
-    cout << "Deleting object with id: " << id << " and data " << data << endl;
+    cout << "Deleting object with name: " << id << endl;
 }
 
 // Question is how to call this function?
 // Should we make this static
 // Or should we make it a friend function?
-std::unique_ptr<Object> createObject(string name, double data) {
-    Object * o = new Object(name, data);
+std::unique_ptr<Object> createObject(string name) {
+    Object * o = new Object(name);
     o->isValid = true;
     std::unique_ptr<Object> uptr(o);
     return uptr;

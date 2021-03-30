@@ -12,8 +12,8 @@ using namespace std;
 class MyObject : public Object{
     int i;
 public:
-    MyObject(string name, double data, int i) 
-            : Object(name, data) 
+    MyObject(string name, int i) 
+            : Object(name) 
     {
         this->i = i;
     }
@@ -23,11 +23,11 @@ public:
     }
 
 public:
-    friend std::unique_ptr<Object> createMyObject(string name, double data, int auxdata);
+    friend std::unique_ptr<Object> createMyObject(string name, int auxdata);
 
 };
 
-std::unique_ptr<Object> createMyObject(string name, double data, int auxdata);
+std::unique_ptr<Object> createMyObject(string name, int auxdata);
 
 
 

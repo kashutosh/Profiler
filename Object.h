@@ -15,7 +15,6 @@ using namespace std;
 class Object {
     int id;
     string name;
-    double data;
     bool isValid;
 
 private:
@@ -24,10 +23,8 @@ private:
     Object() = delete;
 
 protected:
-    Object(string name, double data) {
-        cout << "Creating object with data " << data << endl;
+    Object(string name) {
         this->name = name;
-        this->data = data;
         this->isValid = true;
     }
 
@@ -37,18 +34,16 @@ public:
     virtual ~Object();
     int getId       () { return this->id; }
     string getName  () { return this->name; }
-    double getData  () { return this->data;  }
     bool getIsValid () { return this->isValid; }
     void setId    (int id) { this->id = id; }
     void setName  (string name) { this->name = name; }
-    void setData  (double data) { this->data = data;  }
     void setIsValid (bool isValid) { this->isValid = isValid; }
 
     // When we say unique_ptr, we are effectively saying that I'll take 
     //    the ownership. The guy who created this object will no more 
     //    be able to modify it. This is an excellent implementation if 
     //    we are to handle non-mutable objects.
-    friend std::unique_ptr<Object> createObject(string name, double data);
+    friend std::unique_ptr<Object> createObject(string name);
 
    // Disallow creation of objects without parameters
     std::unique_ptr<Object> createObject() = delete;
