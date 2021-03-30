@@ -23,6 +23,7 @@ private:
     // Objects must be created by createObject methods
     Object() = delete;
 
+protected:
     Object(string name, double data) {
         cout << "Creating object with data " << data << endl;
         this->name = name;
@@ -31,8 +32,9 @@ private:
     }
 
 public:
-
-    ~Object();
+    // Derive the objects to be stored using Object class.
+    // Therefore the destructor must be virtual
+    virtual ~Object();
     int getId       () { return this->id; }
     string getName  () { return this->name; }
     double getData  () { return this->data;  }

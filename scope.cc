@@ -5,6 +5,7 @@
 #include "scope.h"
 #include "ObjectStorage.h"
 #include "commons.h"
+#include "MyObject.h"
 using namespace std;
 
 Record::Record(string _name) {
@@ -23,7 +24,7 @@ Record::~Record() {
     }
     cout << "The time taken in scope " << name << " is " << end_timestamp - start_timestamp << endl;
 
-    std::unique_ptr<Object> ptr(createObject("object1", end_timestamp - start_timestamp));
+    std::unique_ptr<Object> ptr(createMyObject("object1", end_timestamp - start_timestamp, 1));
     ObjectStorage *os = ObjectStorage::getInstance();
 
     // handover the ownership of this pointer to ObjectStorage
@@ -60,11 +61,11 @@ int main() {
     os->removeFromTracking(2);
     os->print();
 
-    std::unique_ptr<Object> ptr1(createObject("object2", 99));
+    std::unique_ptr<Object> ptr1(createMyObject("object2", 99, 2));
     os->registerForTracking(std::move(ptr1));
-    std::unique_ptr<Object> ptr2(createObject("object2", 100));
+    std::unique_ptr<Object> ptr2(createMyObject("object2", 100, 3));
     os->registerForTracking(std::move(ptr2));
-    std::unique_ptr<Object> ptr3(createObject("object2", 101));
+    std::unique_ptr<Object> ptr3(createMyObject("object2", 101, 4));
     os->registerForTracking(std::move(ptr3));
 
 
