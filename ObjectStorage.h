@@ -19,10 +19,14 @@ private:
     std::mutex objectsMutex;
     ObjectStorage();
     static ObjectStorage *object_storage;
+    string profilername;
 public:
     bool registerForTracking(std::unique_ptr<Object>);
     bool removeFromTracking (int idToRemove);
     bool print();
+
+    string getProfilerName();
+    bool setProfilerName(string profilername);
 
     static ObjectStorage *getInstance() {
         if (object_storage == nullptr) {
