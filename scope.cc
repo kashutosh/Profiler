@@ -24,7 +24,7 @@ Record::~Record() {
     }
     cout << "The time taken in scope " << name << " is " << end_timestamp - start_timestamp << endl;
 
-    std::unique_ptr<Object> ptr(createMyObject("object1", end_timestamp - start_timestamp, 1));
+    std::unique_ptr<Object> ptr(createMyObject("object1", end_timestamp - start_timestamp));
     ObjectStorage *os = ObjectStorage::getInstance();
 
     // handover the ownership of this pointer to ObjectStorage
@@ -61,11 +61,11 @@ int main() {
     os->removeFromTracking(2);
     os->print();
 
-    std::unique_ptr<Object> ptr1(createMyObject("object2", 99, 2));
+    std::unique_ptr<Object> ptr1(createMyObject("object2", 99));
     os->registerForTracking(std::move(ptr1));
-    std::unique_ptr<Object> ptr2(createMyObject("object2", 100, 3));
+    std::unique_ptr<Object> ptr2(createMyObject("object2", 100));
     os->registerForTracking(std::move(ptr2));
-    std::unique_ptr<Object> ptr3(createMyObject("object2", 101, 4));
+    std::unique_ptr<Object> ptr3(createMyObject("object2", 101));
     os->registerForTracking(std::move(ptr3));
 
 
