@@ -9,7 +9,7 @@ Object::~Object() {
 // Question is how to call this function?
 // Should we make this static
 // Or should we make it a friend function?
-std::unique_ptr<Object> createObject(string name) {
+std::unique_ptr<Object> createObject(const string name) {
     Object * o = new Object(name);
     o->isValid = true;
     std::unique_ptr<Object> uptr(o);

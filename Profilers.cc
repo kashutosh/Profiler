@@ -5,7 +5,7 @@ Profilers::Profilers()
 {
 }
 
-ObjectStorage *Profilers::getProfiler(string profilername) {
+ObjectStorage *Profilers::getProfiler(const string profilername) {
     for (vector<ObjectStorage*>::iterator itprofs = profilers.begin();
          itprofs != profilers.end();
          itprofs++) {
@@ -22,7 +22,7 @@ ObjectStorage *Profilers::getProfiler(string profilername) {
     return os;
 }
 
-bool Profilers::deleteProfiler(string profilername) {
+bool Profilers::deleteProfiler(const string profilername) {
     for (vector<ObjectStorage*>::iterator itprofs = profilers.begin();
          itprofs != profilers.end();
          itprofs++) {
@@ -37,7 +37,7 @@ bool Profilers::deleteProfiler(string profilername) {
     return true;
 }
 
-bool Profilers::doesAProfilerWithThisNameExist(string profilername) {
+bool Profilers::doesAProfilerWithThisNameExist(const string profilername) const{
     for (vector<ObjectStorage*>::iterator itprofs = profilers.begin();
          itprofs != profilers.end();
          itprofs++) {

@@ -22,7 +22,7 @@ bool ObjectStorage::registerForTracking(std::unique_ptr<Object> obj) {
     return true;
 }
 
-bool ObjectStorage::removeFromTracking(int idToRemove) {
+bool ObjectStorage::removeFromTracking(const int idToRemove) {
     // identify in the vector where this object is stored
     // mark isValid = false
 
@@ -50,7 +50,9 @@ bool ObjectStorage::removeFromTracking(int idToRemove) {
 bool ObjectStorage::print() {
     cout << "--------------------------------------------------" << endl;
     cout << "Printing ObjectStorage " << endl;
-    for (vector<unique_ptr<Object> >::iterator it = objects.begin();
+    // const_iterator effectively means an iterator that does not modify
+    //   underlying objects
+    for (vector<unique_ptr<Object> >::const_iterator it = objects.begin();
          it!= objects.end(); it++) {
         Object *current = it->get();
         if (current->getIsValid()) {

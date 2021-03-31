@@ -23,11 +23,11 @@ public:
     }
 
 public:
-    friend std::unique_ptr<Object> createMyObject(string name, int auxdata);
+    friend std::unique_ptr<Object> createMyObject(const string name, const int auxdata);
 
 };
 
-std::unique_ptr<Object> createMyObject(string name, int auxdata);
+std::unique_ptr<Object> createMyObject(const string name, const int auxdata);
 
 
 

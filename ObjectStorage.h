@@ -9,6 +9,12 @@
 
 using namespace std;
 
+/*
+  One must make sure that the memory allocated by ObjectStorage
+  is really well cleaned up.
+
+  Do we need to implement a GC here? Perhaps not.
+*/
 
 class ObjectStorage {
 
@@ -22,11 +28,11 @@ private:
     string profilername;
 public:
     bool registerForTracking(std::unique_ptr<Object>);
-    bool removeFromTracking (int idToRemove);
+    bool removeFromTracking (const int idToRemove);
     bool print();
 
     string getProfilerName();
-    bool setProfilerName(string profilername);
+    bool setProfilerName(const string profilername);
 
     static ObjectStorage *getInstance() {
         if (object_storage == nullptr) {
@@ -36,6 +42,9 @@ public:
     } 
 
     bool emptyObjectStorage();
+
+    // override this function to aggregate the data collected.
+    bool aggregateData();
 };
 
 #endif

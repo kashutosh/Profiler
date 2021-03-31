@@ -16,11 +16,11 @@ private:
 public:
     Profilers();
 
-    ObjectStorage *getProfiler(string profilername);
+    ObjectStorage *getProfiler(const string profilername);
 
-    bool deleteProfiler(string profilername);
+    bool deleteProfiler(const string profilername);
 
-    bool doesAProfilerWithThisNameExist(string profilername);
+    bool doesAProfilerWithThisNameExist(const string profilername) const;
 
     bool clearAllProfilers();
 

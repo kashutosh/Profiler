@@ -43,7 +43,7 @@ public:
     //    the ownership. The guy who created this object will no more 
     //    be able to modify it. This is an excellent implementation if 
     //    we are to handle non-mutable objects.
-    friend std::unique_ptr<Object> createObject(string name);
+    friend std::unique_ptr<Object> createObject(const string name);
 
    // Disallow creation of objects without parameters
     std::unique_ptr<Object> createObject() = delete;
