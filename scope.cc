@@ -8,8 +8,7 @@
 #include "MyObject.h"
 using namespace std;
 
-Record::Record(string _name) {
-    name = _name;
+Record::Record(string _name) : name(_name){
     start_timestamp = gethrtime();
     internal_level++;
     for (int i=0; i<internal_level; i++) {

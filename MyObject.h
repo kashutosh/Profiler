@@ -13,9 +13,8 @@ class MyObject : public Object{
     int i;
 public:
     MyObject(string name, int i) 
-            : Object(name) 
+            : Object(name), i(i)
     {
-        this->i = i;
     }
 
     ~MyObject() {

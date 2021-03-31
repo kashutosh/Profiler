@@ -23,8 +23,7 @@ private:
     Object() = delete;
 
 protected:
-    Object(string name) {
-        this->name = name;
+    Object(string name): name(name) {
         this->isValid = true;
     }
 
