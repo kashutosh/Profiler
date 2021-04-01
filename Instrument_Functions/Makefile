@@ -1,20 +1,27 @@
 TR=Trace
 MN=Main
+AX=Aux
 
-all : $(TR).a $(MN).o
-	g++ $(MN).o $(TR).a -ldl -o out -rdynamic
-
-#stat : $(TR).o $(MN).o
-#	g++ $(TR).o $(MN).o -ldl -o out
+all : $(TR).a $(MN).o $(AX).o
+	g++ $(MN).o $(TR).a $(AX).o -ldl -o out -rdynamic
 
 $(TR).a : $(TR).o
 	ar rvs $(TR).a $(TR).o 
+
+$(AX).a : $(AX).o
+	ar rvs $(AX).a $(AX).o 
 
 $(TR).o : $(TR).cc $(TR).h
 	g++ -c -finstrument-functions $(TR).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include
 
 $(MN).o : $(MN).cc
+	# It is mandatory to call finstrument-functions on main
 	g++ -c -finstrument-functions $(MN).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include
 
+$(AX).o : $(AX).cc
+	g++ -c -finstrument-functions $(AX).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include
+
+
+
 clean :
-	rm $(TR).a $(TR).o $(MN).o out
+	rm $(TR).a $(TR).o $(MN).o out $(AX).o $(AX).a
