@@ -26,8 +26,8 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
     Dl_info info;
     printf("entering %p @@", (void*)(int*)this_fn);
     if (dladdr(this_fn, &info)) {
-        printf("[%s] ",info.dli_sname ? info.dli_sname : "?");
-        printf("[%s]\n",info.dli_fname ? info.dli_fname : "?");
+        printf("[%s] ",info.dli_sname ? info.dli_sname : "unknown");
+        printf("[%s]\n",info.dli_fname ? info.dli_fname : "unknown");
     }
     Dummy d;
     s.push(d);
@@ -39,8 +39,8 @@ void __cyg_profile_func_exit(void* this_fn, void* call_site)
     Dl_info info;
     printf("exiting %p @@", (void *)(int*)this_fn);
     if (dladdr(this_fn, &info)) {
-        printf("[%s] ",info.dli_sname ? info.dli_sname : "?");
-        printf("[%s]\n",info.dli_fname ? info.dli_fname : "?");
+        printf("[%s] ",info.dli_sname ? info.dli_sname : "unknown");
+        printf("[%s]\n",info.dli_fname ? info.dli_fname : "unknown");
     }
     s.pop();
 
