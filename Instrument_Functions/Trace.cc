@@ -5,6 +5,7 @@
 #include <pthread.h>
 
 #include "Trace.h"
+#include "Aux.h"
 
 #ifdef __cplusplus
 using namespace std;
