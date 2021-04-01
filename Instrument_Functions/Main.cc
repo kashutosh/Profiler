@@ -1,6 +1,6 @@
 #include <iostream>
+#include "Trace.h"
 using namespace std;
-
 
 void foo() {
     cout << "foo " << endl;
@@ -24,6 +24,7 @@ int main() {
     C * c = new C();
     c->printC();
     delete c;
+    Stack s;
     return 0;
 }
 
