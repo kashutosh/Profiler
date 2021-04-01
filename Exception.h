@@ -15,8 +15,8 @@ public:
     Exception(const char *message) : msg_(message){
     }
 
-    void setMessage(string message) {
-    }
+    /*virtual void setMessage(string message) {
+    }*/
     virtual const char* what() const throw() {
         return msg_.c_str();
     }

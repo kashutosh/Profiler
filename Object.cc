@@ -10,10 +10,15 @@ Object::~Object() {
 // Should we make this static
 // Or should we make it a friend function?
 std::unique_ptr<Object> createObject(const string name) {
-    Object * o = new Object(name);
-    o->isValid = true;
-    std::unique_ptr<Object> uptr(o);
-    return uptr;
+    try {
+        Object * o = new Object(name);
+        o->isValid = true;
+        std::unique_ptr<Object> uptr(o);
+        return uptr;
+    }
+    catch (exception &e) {
+        throw;
+    }
 }
 
 // If we want to force an API that constructs an object of a class be returned 

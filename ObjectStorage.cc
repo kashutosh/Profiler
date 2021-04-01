@@ -12,13 +12,20 @@ ObjectStorage::ObjectStorage() {
 }
 
 bool ObjectStorage::registerForTracking(std::unique_ptr<Object> obj) {
-    // Lock the objects vector
-    objectsMutex.lock();
-    int id = this->objects.size() + 1;
-    cout << "Registering object with name: " << obj->getName() << endl;
-    obj.get()->setId(id);
-    objects.push_back(std::move(obj));
-    objectsMutex.unlock();
+    try {
+        // Lock the objects vector
+        objectsMutex.lock();
+        int id = this->objects.size() + 1;
+        cout << "Registering object with name: " << obj->getName() << endl;
+        obj.get()->setId(id);
+        objects.push_back(std::move(obj));
+        objectsMutex.unlock();
+    }
+    catch (exception &e) {
+        throw;
+        return false;
+    }
+
     return true;
 }
 
@@ -67,12 +74,18 @@ bool ObjectStorage::print() {
 bool ObjectStorage::emptyObjectStorage() {
     cout << "--------------------------------------------------" << endl;
     cout << "Emptying ObjectStorage " << endl;
-    for (vector<unique_ptr<Object> >::iterator it = objects.begin();
-         it!= objects.end(); it++) {
-        Object *current = it->get();
-        cout << "Deleting: " << current->getName() << endl;
-        Object *releasePtr = it->release();
-        delete releasePtr;
+    try {
+        for (vector<unique_ptr<Object> >::iterator it = objects.begin();
+             it!= objects.end(); it++) {
+            Object *current = it->get();
+            cout << "Deleting: " << current->getName() << endl;
+            Object *releasePtr = it->release();
+            delete releasePtr;
+        }
+
+    }
+    catch (exception &e) {
+        throw;
     }
     return true;
 }

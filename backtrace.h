@@ -9,6 +9,7 @@
 #include <unistd.h>
 
 #include "Object.h"
+#include "Exception.h"
 
 #define BT_BUF_SIZE 100
 
@@ -36,6 +37,16 @@ public:
     bool translateAddresses(); 
 
     friend std::unique_ptr<Object> createBackTraceObject(string name);
+};
+
+
+class BackTraceEx : public Exception {
+public:
+    BackTraceEx (BackTraceEx &e) : Exception (e) {
+    }
+    BackTraceEx(const char *message) : Exception(message) {
+
+    }
 };
 
 #endif
