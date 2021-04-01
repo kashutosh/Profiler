@@ -10,11 +10,11 @@ all : $(TR).a $(MN).o
 $(TR).a : $(TR).o
 	ar rvs $(TR).a $(TR).o 
 
-$(TR).o : $(TR).cc
-	g++ -c -finstrument-functions $(TR).cc -rdynamic
+$(TR).o : $(TR).cc $(TR).h
+	g++ -c -finstrument-functions $(TR).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include
 
 $(MN).o : $(MN).cc
-	g++ -c -finstrument-functions $(MN).cc -rdynamic
+	g++ -c -finstrument-functions $(MN).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include
 
 clean :
 	rm $(TR).a $(TR).o $(MN).o out

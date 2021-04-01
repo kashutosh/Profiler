@@ -18,54 +18,31 @@ extern "C"
 #endif
 
 
+Stack s;
 // When we enter the function, this block of code executes
 void __cyg_profile_func_enter(void* this_fn, void* call_site)
 {
+    if (!initialization_complete) return;
     Dl_info info;
     printf("entering %p @@", (void*)(int*)this_fn);
     if (dladdr(this_fn, &info)) {
         printf("[%s] ",info.dli_sname ? info.dli_sname : "?");
         printf("[%s]\n",info.dli_fname ? info.dli_fname : "?");
-        Dummy d;
-        d.print();
     }
+    Dummy d;
+    s.push(d);
 }
 
 void __cyg_profile_func_exit(void* this_fn, void* call_site)
 {
+    if (!initialization_complete) return;
     Dl_info info;
     printf("exiting %p @@", (void *)(int*)this_fn);
     if (dladdr(this_fn, &info)) {
         printf("[%s] ",info.dli_sname ? info.dli_sname : "?");
         printf("[%s]\n",info.dli_fname ? info.dli_fname : "?");
     }
+    s.pop();
 
 }
 
-/*
-void foo() {
-    cout << "foo " << endl;
-}
-
-class C {
-public:
-    C() {
-    }
-    ~C() {
-
-    }
-    void printC() {
-        cout << "Printing C " << endl;
-    }
-};
-
-
-int main() {
-    foo();
-    C * c = new C();
-    c->printC();
-    delete c;
-    return 0;
-}
-
-*/
