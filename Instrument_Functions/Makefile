@@ -1,15 +1,13 @@
 TR=Trace
 MN=Main
 AX=Aux
+ST=Stack
 
-all : $(TR).a $(MN).o $(AX).o
-	g++ $(MN).o $(TR).a $(AX).o -ldl -o out -rdynamic
+all : $(TR).a $(MN).o $(AX).o $(ST).o
+	g++ $(MN).o $(TR).a $(AX).o $(ST).o -ldl -o out -rdynamic
 
 $(TR).a : $(TR).o
 	ar rvs $(TR).a $(TR).o 
-
-$(AX).a : $(AX).o $(AX).h
-	ar rvs $(AX).a $(AX).o 
 
 $(TR).o : $(TR).cc $(TR).h
 	g++ -c -finstrument-functions $(TR).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include/c++
@@ -20,6 +18,9 @@ $(MN).o : $(MN).cc
 
 $(AX).o : $(AX).cc
 	g++ -c -finstrument-functions $(AX).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include/c++
+
+$(ST).o : $(ST).cc $(TR).h
+	g++ -c -finstrument-functions $(ST).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include/c++
 
 
 

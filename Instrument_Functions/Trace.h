@@ -8,6 +8,10 @@
 #include <pthread.h>
 
 extern int initialization_complete;
+
+
+// We intend to use Dummy in __cyg_profile functions
+// So DO NOT USE STL here
 struct Dummy {
     public:
         int data;
@@ -32,33 +36,20 @@ struct Dummy {
 
 #define MAX_STACK_DEPTH 200
 
+
+// We intend to use Stack in __cyg_profile functions
+// So DO NOT USE STL here
 class Stack {
     public:
         Dummy frames[MAX_STACK_DEPTH];
         int index;
-        Stack() __attribute__((no_instrument_function)) {
-            printf ("Creating stack \n");
-            index = -1;
-        }
+        Stack() __attribute__((no_instrument_function));
 
-        void push(Dummy frame) __attribute__((no_instrument_function)) {
-            index++;
-            frames[index] = frame;
-        }
+        void push(Dummy frame) __attribute__((no_instrument_function));
 
-        Dummy pop() __attribute__((no_instrument_function)) {
-            Dummy d;
-            // When main is exited, event then pop is called
-            // So is case when main entered
-            // if (index <= 0) return d;
-            d = frames[index];
-            index--;
-            return d;
-        }
+        Dummy pop() __attribute__((no_instrument_function));
 
-        int numFrames() __attribute__((no_instrument_function)) {
-            return index;
-        }
+        int numFrames() __attribute__((no_instrument_function));
 
 };
 
