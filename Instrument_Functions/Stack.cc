@@ -1,4 +1,5 @@
 #include "Trace.h"
+#include "../Exception.h"
 #define MAX_STACK_DEPTH 200
 
 
@@ -7,21 +8,29 @@ Stack::Stack() {
     index = -1;
 }
 
+
+// Why should this be copy by value?
 void Stack::push(Dummy frame) {
+    if (index == (MAX_STACK_DEPTH-1) ) {
+        cout << "Throwing an exception \n";
+        Exception e("Stack Overflowed beyond capacity");
+        throw e;
+    }
     index++;
     frames[index] = frame;
 }
 
 Dummy Stack::pop() {
-    Dummy d;
     // When main is exited, event then pop is called
     // So is case when main entered
-    // if (index <= 0) return d;
-    d = frames[index];
+    if (index <= 0) {
+        Exception e("Stack underflow");
+        throw e;
+    }
     index--;
-    return d;
+    return frames[index];
 }
 
 int Stack::numFrames() {
-    return index;
+    return index+1;
 }

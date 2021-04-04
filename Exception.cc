@@ -14,10 +14,10 @@ void foo() {
   catch (std::exception& e)
   {
     std::cerr << "exception caught: " << e.what() << '\n';
-    throw;
+    //throw;
   }
 
-    string s("Hit an exception in foo");
+    string s("Hit an exception in foo function and I am throwing it");
     Exception e(s.c_str());
     throw e;
 }
