@@ -87,5 +87,12 @@ bool ObjectStorage::emptyObjectStorage() {
     catch (exception &e) {
         throw;
     }
+    objects.erase(objects.begin(), objects.end());
     return true;
 }
+
+
+int ObjectStorage::getObjectsCount() {
+    return objects.size();
+}
+

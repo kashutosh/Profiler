@@ -41,6 +41,8 @@ public:
         return object_storage;
     } 
 
+    int getObjectsCount();
+
     bool emptyObjectStorage();
 
     // override this function to aggregate the data collected.
