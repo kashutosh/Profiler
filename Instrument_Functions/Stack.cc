@@ -1,4 +1,5 @@
 #include "Trace.h"
+#include "../Exception.h"
 #define MAX_STACK_DEPTH 200
 
 
@@ -8,6 +9,11 @@ Stack::Stack() {
 }
 
 void Stack::push(Dummy frame) {
+    if (index == (MAX_STACK_DEPTH-1) ) {
+        cout << "Throwing an exception \n";
+        Exception e("Stack Overflowed beyond capacity");
+        throw e;
+    }
     index++;
     frames[index] = frame;
 }
@@ -23,5 +29,5 @@ Dummy Stack::pop() {
 }
 
 int Stack::numFrames() {
-    return index;
+    return index+1;
 }
