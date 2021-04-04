@@ -19,7 +19,6 @@ set(CMAKE_BINARY_DIR binary_tests/)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 
-
 enable_testing()
 
 add_executable(  hello  hello.cc ../mylib.cc)
