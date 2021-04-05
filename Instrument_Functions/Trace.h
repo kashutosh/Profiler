@@ -54,6 +54,10 @@ class Stack {
 };
 
 class FunctionTracer {
+private:
+    FunctionTracer();
+    FunctionTracer(FunctionTracer &);
+    FunctionTracer &operator = (FunctionTracer &);
 public:
     static void initializeTracer();
 };

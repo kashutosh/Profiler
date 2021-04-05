@@ -36,10 +36,4 @@ int Stack::numFrames() {
     return index+1;
 }
 
-void FunctionTracer::initializeTracer() {
-    extern Stack s;
-    extern int initialization_complete;
-    initialization_complete = 1;
-    s.push(Dummy());
-    s.push(Dummy());
-}
+
