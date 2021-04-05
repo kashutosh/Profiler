@@ -49,4 +49,6 @@ public:
     }
 };
 
+
+std::unique_ptr<Object> createBackTraceObject(string name);
 #endif

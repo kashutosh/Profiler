@@ -22,6 +22,6 @@ SET(CMAKE_CXX_FLAGS "-g -O3 -Wall -Wpedantic -rdynamic -ldl")
 
 project (profiler LANGUAGES ${LANGUAGES} VERSION ${VERSION})
 add_executable (scopeprofiler scope.cc scope_main.cc ObjectStorage.cc Object.cc MyObject.cc )
-add_executable (backtracer ObjectStorage.cc Object.cc backtrace.cc )
+add_executable (backtracer backtrace.cc backtrace_main.cc ObjectStorage.cc Object.cc )
 
 add_library (objects SHARED Object.cc ObjectStorage.cc)
