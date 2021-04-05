@@ -1,4 +1,7 @@
 #include "backtrace.h"
+#include "ObjectStorage.h"
+
+using namespace std;
 
 
 std::unique_ptr<Object> createBackTraceObject(string name) {
@@ -32,23 +35,39 @@ bool Backtrace::trace() {
 }
 
 bool Backtrace::translateAddresses() {
-   char **strings;
-   strings = backtrace_symbols(this->buffer, this->nptrs);
-   if (strings == NULL) {
-       //perror("backtrace_symbols");
-       //exit(EXIT_FAILURE);
-       BackTraceEx e("Unable to get backtrace in string form");
-       throw e;
-   }
+    char **strings;
+    strings = backtrace_symbols(this->buffer, this->nptrs);
+    if (strings == NULL) {
+        //perror("backtrace_symbols");
+        //exit(EXIT_FAILURE);
+        BackTraceEx e("Unable to get backtrace in string form");
+        throw e;
+    }
 
-   for (int j = 0; j < nptrs; j++)
-       printf("%s\n", strings[j]);
 
-   // Free the memory allocated to strings
-   free(strings);
-   return true;
+    // Copy the strings to Backtrace object
+    for (int j = 0; j < nptrs; j++) {
+        //printf("%s\n", strings[j]);
+        string s(strings[j]);
+        // Copy by value
+        // Let this string object get destroyed after the loop
+        this->callstack.push_back(s);
+    }
+
+
+    // Free the memory allocated to strings
+    free(strings);
+    return true;
 }
 
 
+
+bool Backtrace::print() {
+    for (vector<string>::const_iterator it = callstack.begin();
+         it!=callstack.end(); it++) {
+        cout << *it << endl;
+    }
+    return true;
+}
 
 

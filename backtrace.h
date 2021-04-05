@@ -2,6 +2,7 @@
 #define BACKTRACE_H
 #include <iostream>
 #include <vector>
+#include <string>
 
 #include <execinfo.h>
 #include <stdio.h>
@@ -24,7 +25,8 @@ class Backtrace : public Object{
 private:
     int nptrs;
     void *buffer[BT_BUF_SIZE];
-    char **strings;
+    vector<string> callstack;
+    //char **strings;
 
 public:
 
@@ -37,6 +39,8 @@ public:
     bool translateAddresses(); 
 
     friend std::unique_ptr<Object> createBackTraceObject(string name);
+
+    bool print();
 };
 
 

@@ -64,6 +64,7 @@ bool ObjectStorage::print() {
         Object *current = it->get();
         if (current->getIsValid()) {
             cout << "Name: " << current->getName() << endl;
+            current->print();
         }
     }
 

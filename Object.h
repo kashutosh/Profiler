@@ -38,6 +38,8 @@ public:
     void setName  (string name) { this->name = name; }
     void setIsValid (bool isValid) { this->isValid = isValid; }
 
+    virtual bool print() {return true; };
+
     // When we say unique_ptr, we are effectively saying that I'll take 
     //    the ownership. The guy who created this object will no more 
     //    be able to modify it. This is an excellent implementation if 
