@@ -25,3 +25,4 @@ add_executable (scopeprofiler scope.cc scope_main.cc ObjectStorage.cc Object.cc 
 add_executable (backtracer backtrace.cc backtrace_main.cc ObjectStorage.cc Object.cc )
 
 #add_library (objects SHARED Object.cc ObjectStorage.cc)
+add_library (keyvaluestore SHARED KeyValueStore.cc )
