@@ -24,13 +24,15 @@ Stack s;
 void __cyg_profile_func_enter(void* this_fn, void* call_site)
 {
     if (!initialization_complete) return;
+
+    // Do not do address translations right here?
     Dl_info info;
     printf("entering %p @@", (void*)(int*)this_fn);
     if (dladdr(this_fn, &info)) {
         printf("[%s] ",info.dli_sname ? info.dli_sname : "unknown");
         printf("[%s]\n",info.dli_fname ? info.dli_fname : "unknown");
     }
-    Dummy d;
+    FrameInformation d;
     s.push(d);
 }
 

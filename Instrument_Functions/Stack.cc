@@ -12,7 +12,7 @@ Stack::Stack() {
 
 
 // Why should this be copy by value?
-void Stack::push(Dummy frame) {
+void Stack::push(FrameInformation frame) {
     if (index == (MAX_STACK_DEPTH-1) ) {
         cout << "Throwing an exception \n";
         Exception e("Stack Overflowed beyond capacity");
@@ -22,7 +22,7 @@ void Stack::push(Dummy frame) {
     frames[index] = frame;
 }
 
-Dummy Stack::pop() {
+FrameInformation Stack::pop() {
     // When main is exited, event then pop is called
     // So is case when main entered
     if (index < 0) {

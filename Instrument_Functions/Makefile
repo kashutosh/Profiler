@@ -5,7 +5,7 @@ ST=Stack
 FTR=FunctionTracer
 
 all : $(TR).a $(MN).o $(AX).o $(ST).o $(FTR).o
-	g++ $(MN).o $(TR).a $(AX).o $(ST).o $(FTR).o -ldl -o out -rdynamic
+	g++ $(MN).o $(TR).a $(AX).o $(ST).o $(FTR).o -ldl -o $(FTR) -rdynamic
 
 $(TR).a : $(TR).o
 	ar rvs $(TR).a $(TR).o 
