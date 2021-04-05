@@ -41,6 +41,8 @@ int main() {
     //Aux a;
     //a.init();
     delete c;
+    extern Stack s;
+    s.printStackFrames("/tmp/foo.out");
     return 0;
 }
 

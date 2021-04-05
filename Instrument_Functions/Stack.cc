@@ -1,5 +1,6 @@
 #include "Trace.h"
 #include "../Exception.h"
+#include <fstream>
 #define MAX_STACK_DEPTH 200
 
 using namespace FlightRecorder;
@@ -37,3 +38,19 @@ int Stack::numFrames() {
 }
 
 
+bool Stack::printStackFrames(const char *filename) {
+    // Open the file with given file name
+
+    // Should not use c++ primitives as long as possible, isn't it?
+    ofstream outfile;
+    outfile.open(filename, ios::out);
+
+    if (!outfile.is_open()) {
+        Exception e("Unable to open file " );
+        throw e;
+    }
+
+
+    outfile.close();
+    return true;
+}

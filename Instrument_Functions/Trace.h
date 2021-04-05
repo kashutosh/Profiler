@@ -51,6 +51,8 @@ class Stack {
 
         int numFrames() __attribute__((no_instrument_function));
 
+        bool printStackFrames(const char *filename) __attribute__((no_instrument_function));
+
 };
 
 class FunctionTracer {
