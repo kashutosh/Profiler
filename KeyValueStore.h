@@ -12,9 +12,11 @@ class KeyValueStore {
 
 private:
     map<string, string> keyValuePairs;
-    KeyValueStore();
     static KeyValueStore *keyvalue_store;
+    KeyValueStore(KeyValueStore &kvs);
 public:
+    KeyValueStore();
+
     bool print();
 
     static KeyValueStore *getInstance() {
@@ -31,6 +33,8 @@ public:
     bool checkIfThisKeyExists(const string key);
 
     string getValue(const string key) const;
+
+    bool insertKeyValue(string key, string value);
 
 
     // Utility functions to convert common types to string

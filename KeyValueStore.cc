@@ -5,6 +5,8 @@ using namespace std;
 namespace FlightRecorder{
 KeyValueStore *KeyValueStore ::keyvalue_store = nullptr;
 
+KeyValueStore::KeyValueStore() {
+}
 
 bool KeyValueStore::print() {
     return true;
@@ -46,6 +48,18 @@ string KeyValueStore::getUniqueName() {
         }
     }
     return nextname;
+}
+
+bool KeyValueStore::insertKeyValue(string key, string value) {
+
+    if (KeyValueStore::checkIfThisKeyExists(key) == false) {
+        // This key does not exist. So we can insert
+        this->keyValuePairs.insert(pair<string,string>(key, value));
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 }
