@@ -28,7 +28,7 @@ public:
 
 int main() {
     // How would somebody detect that initialization happened here?
-    initialization_complete = 1;
+    FunctionTracer::initializeTracer();
     printf("main is called \n");
     // There is practically no difference in calling 
     // callout (from external file) and foo (from same file)
@@ -38,8 +38,8 @@ int main() {
     C * c = new C();
     c->printC();
 
-    Aux a;
-    a.init();
+    //Aux a;
+    //a.init();
     delete c;
     return 0;
 }

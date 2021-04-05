@@ -24,7 +24,7 @@ void Stack::push(Dummy frame) {
 Dummy Stack::pop() {
     // When main is exited, event then pop is called
     // So is case when main entered
-    if (index <= 0) {
+    if (index < 0) {
         Exception e("Stack underflow");
         throw e;
     }
@@ -34,4 +34,12 @@ Dummy Stack::pop() {
 
 int Stack::numFrames() {
     return index+1;
+}
+
+void FunctionTracer::initializeTracer() {
+    extern Stack s;
+    extern int initialization_complete;
+    initialization_complete = 1;
+    s.push(Dummy());
+    s.push(Dummy());
 }

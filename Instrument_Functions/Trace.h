@@ -53,4 +53,9 @@ class Stack {
 
 };
 
+class FunctionTracer {
+public:
+    static void initializeTracer();
+};
+
 #endif
