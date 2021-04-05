@@ -3,6 +3,7 @@
 
 using namespace std;
 
+namespace FlightRecorder {
 // For sake of creating singletons
 ObjectStorage *ObjectStorage ::object_storage = nullptr;
 
@@ -96,4 +97,4 @@ bool ObjectStorage::emptyObjectStorage() {
 int ObjectStorage::getObjectsCount() {
     return objects.size();
 }
-
+}

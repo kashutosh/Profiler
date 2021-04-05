@@ -3,6 +3,7 @@
 #include "../Exception.h"
 #include <iostream>
 using namespace std;
+using namespace FlightRecorder;
 
 int initialization_complete = 1;
 // Demonstrate some basic assertions.

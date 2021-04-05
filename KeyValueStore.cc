@@ -1,5 +1,8 @@
 #include "KeyValueStore.h"
 
+using namespace std;
+
+namespace FlightRecorder{
 KeyValueStore *KeyValueStore ::keyvalue_store = nullptr;
 
 
@@ -45,4 +48,4 @@ string KeyValueStore::getUniqueName() {
     return nextname;
 }
 
-
+}

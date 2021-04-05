@@ -1,9 +1,10 @@
 #include <gtest/gtest.h>
 #include "../ObjectStorage.h"
 #include "../Object.h"
+#include "../commons.h"
 
+using namespace FlightRecorder;
 //ObjectStorage *ObjectStorage ::object_storage = nullptr;
-std::unique_ptr<Object> createObject(const string name);
 class ObjectStorageTest : public ::testing::Test {
  protected:
   void SetUp() override {

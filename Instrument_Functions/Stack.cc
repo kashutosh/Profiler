@@ -2,6 +2,7 @@
 #include "../Exception.h"
 #define MAX_STACK_DEPTH 200
 
+using namespace FlightRecorder;
 
 Stack::Stack() {
     printf ("Creating stack \n");

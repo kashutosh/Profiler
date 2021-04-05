@@ -11,7 +11,7 @@ using namespace std;
   This interface represents one data point collected by the profiler
 */
 
-
+namespace FlightRecorder {
 class Object {
     int id;
     string name;
@@ -50,6 +50,6 @@ public:
     std::unique_ptr<Object> createObject() = delete;
 };
 
-
+}
 
 #endif

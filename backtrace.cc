@@ -4,6 +4,7 @@
 using namespace std;
 
 
+namespace FlightRecorder {
 std::unique_ptr<Object> createBackTraceObject(string name) {
 
     Backtrace *bt = new Backtrace(name);
@@ -69,5 +70,5 @@ bool Backtrace::print() {
     }
     return true;
 }
-
+}
 

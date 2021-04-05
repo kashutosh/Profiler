@@ -8,6 +8,7 @@
 #include "MyObject.h"
 using namespace std;
 
+namespace FlightRecorder {
 int Record::internal_level = 0;
 Record::Record(string _name) : name(_name){
     start_timestamp = gethrtime();
@@ -32,4 +33,4 @@ Record::~Record() {
     os->registerForTracking(std::move(ptr));
     internal_level--;
 }
-
+}

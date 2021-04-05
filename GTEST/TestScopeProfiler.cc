@@ -3,6 +3,7 @@
 #include "../Exception.h"
 #include <iostream>
 using namespace std;
+using namespace FlightRecorder;
 
 TEST(FirstTestSuite, CheckingBasicUsage) {
   int hitException = 0;

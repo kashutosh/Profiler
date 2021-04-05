@@ -6,7 +6,7 @@
 #include <string>
 using namespace std;
 
-
+namespace FlightRecorder {
 class Exception : public exception{
 private:
     string msg_;
@@ -24,5 +24,6 @@ public:
         return msg_.c_str();
     }
 };
+}
 
 #endif

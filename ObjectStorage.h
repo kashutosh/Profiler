@@ -9,6 +9,7 @@
 
 using namespace std;
 
+namespace FlightRecorder {
 /*
   One must make sure that the memory allocated by ObjectStorage
   is really well cleaned up.
@@ -48,5 +49,5 @@ public:
     // override this function to aggregate the data collected.
     bool aggregateData();
 };
-
+}
 #endif

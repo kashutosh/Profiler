@@ -8,6 +8,7 @@
 #include "ObjectStorage.h"
 using namespace std;
 
+namespace FlightRecorder {
 class Record {
 typedef unsigned long long hrtime;
 
@@ -33,4 +34,6 @@ private:
 
 
 #define SCOPE_TIMER(number, name) Record r##number(name)
+}
+
 #endif

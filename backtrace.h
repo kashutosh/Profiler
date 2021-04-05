@@ -17,6 +17,7 @@
 
 using namespace std;
 
+namespace FlightRecorder {
 typedef unsigned int uint;
 
 // Simply said, a backtrace is a Object
@@ -55,4 +56,5 @@ public:
 
 
 std::unique_ptr<Object> createBackTraceObject(string name);
+}
 #endif

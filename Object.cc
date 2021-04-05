@@ -2,6 +2,7 @@
 #include <memory>
 using namespace std;
 
+namespace FlightRecorder {
 Object::~Object() {
     cout << "Deleting object with name: " << id << endl;
 }
@@ -30,4 +31,4 @@ std::unique_ptr<Object> createObject(const string name) {
 // This is very awful looking coding, isn't it?
 
 
-
+}

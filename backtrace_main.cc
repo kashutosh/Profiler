@@ -2,6 +2,7 @@
 
 #include "ObjectStorage.h"
 using namespace std;
+using namespace FlightRecorder;
 
 void f3() {
     std::unique_ptr<Object> bt = createBackTraceObject("trace2");

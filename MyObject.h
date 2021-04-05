@@ -9,6 +9,7 @@
 
 using namespace std;
 
+namespace FlightRecorder {
 class MyObject : public Object{
     int i;
 public:
@@ -27,7 +28,7 @@ public:
 };
 
 std::unique_ptr<Object> createMyObject(const string name, const int auxdata);
-
+}
 
 
 #endif

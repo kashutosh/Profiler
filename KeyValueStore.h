@@ -7,7 +7,7 @@
 
 using namespace std;
 
-
+namespace FlightRecorder {
 class KeyValueStore {
 
 private:
@@ -49,5 +49,5 @@ public:
     string getUniqueName() ;
 
 };
-
+}
 #endif

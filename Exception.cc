@@ -2,7 +2,7 @@
 #include <iostream>
 #include <typeinfo>
 using namespace std;
-
+using namespace FlightRecorder;
 class Polymorphic {virtual void member(){}};
 void foo() {
 

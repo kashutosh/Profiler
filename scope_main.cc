@@ -7,6 +7,7 @@
 #include "commons.h"
 #include "MyObject.h"
 using namespace std;
+using namespace FlightRecorder;
 
 
 void f() {
