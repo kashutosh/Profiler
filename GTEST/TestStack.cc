@@ -50,11 +50,9 @@ TEST_F(StackTest, TestOverflow) {
   }
   catch (Exception &e) {
     const char *error = e.what();
+    printf("Error is %s \n", error);
     EXPECT_EQ(strcmp(error, "Stack Overflowed beyond capacity"), 0);
 
-  }
-  catch (std::exception e) {
-    printf("Caught std::exception %s\n", e.what());
   }
 
 }
