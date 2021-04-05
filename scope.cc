@@ -8,6 +8,7 @@
 #include "MyObject.h"
 using namespace std;
 
+int Record::internal_level = 0;
 Record::Record(string _name) : name(_name){
     start_timestamp = gethrtime();
     internal_level++;
@@ -31,7 +32,7 @@ Record::~Record() {
     os->registerForTracking(std::move(ptr));
     internal_level--;
 }
-
+/*
 void f() {
      SCOPE_TIMER(1, "F_Scope");
      cout << "Inside function f\n";
@@ -70,3 +71,4 @@ int main() {
 
     os->emptyObjectStorage();
 }
+*/

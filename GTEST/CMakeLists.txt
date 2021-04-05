@@ -23,9 +23,11 @@ enable_testing()
 
 add_executable(  hello  hello.cc ../mylib.cc)
 add_executable(  teststack  TestStack.cc ../Instrument_Functions/Stack.cc)
+add_executable(  testscopeprofiler  TestScopeProfiler.cc ../scope.cc ../ObjectStorage.cc ../MyObject.cc ../Object.cc)
 add_executable(  testobjectstorage TestObjectStorage.cc ../ObjectStorage.cc ../Object.cc)
 target_link_libraries(hello gtest_main)
 target_link_libraries(teststack gtest_main)
+target_link_libraries(testscopeprofiler gtest_main)
 target_link_libraries(testobjectstorage gtest_main)
 
 include(GoogleTest)

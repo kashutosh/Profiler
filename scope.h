@@ -1,3 +1,6 @@
+#ifndef SCOPE_H
+#define SCOPE_H
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -27,8 +30,7 @@ private:
 
 };
 
-int Record::internal_level = 0;
 
 
 #define SCOPE_TIMER(number, name) Record r##number(name)
-
+#endif
