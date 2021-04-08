@@ -37,6 +37,11 @@ int Stack::numFrames() {
     return index+1;
 }
 
+int Stack::top() {
+    return index;
+}
+
+
 
 bool Stack::printStackFrames(const char *filename) {
     // Open the file with given file name
@@ -53,4 +58,12 @@ bool Stack::printStackFrames(const char *filename) {
 
     outfile.close();
     return true;
+}
+
+
+FrameInformation &Stack::getFrame(int index) {
+     if (index <=0 || index > MAX_STACK_DEPTH) {
+         return frames[0];
+     }
+     return frames[index];
 }
