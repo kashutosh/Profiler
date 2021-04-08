@@ -42,8 +42,8 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
     printf(";call_site %p @@", (void*)(int*)call_site);
 
     uint threadid = pthread_self();
-    ulint address = (ulint)((void*)(ulint*) this_fn);
-    ulint call_site_addr = (ulint)((void *) (ulint*) call_site);
+    void *address = this_fn;
+    void *call_site_addr = call_site;
     hrtime start_time = gethrtime();
     hrtime end_time = start_time;
 
@@ -55,6 +55,7 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
         printf("[%s]\n",info.dli_fname ? info.dli_fname : "unknown");
     }
     FrameInformation d (threadid, address, call_site_addr, start_time, end_time);
+    strcpy(d.function_name, info.dli_sname);
     
     s.push(d);
 }
@@ -62,17 +63,27 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
 void __cyg_profile_func_exit(void* this_fn, void* call_site)
 {
     if (!initialization_complete) return;
-    Dl_info info;
+    Dl_info info_current;
     printf("exiting %p @@", (void *)(int*)this_fn);
     printf(";call_site %p @@", (void*)(int*)call_site);
     hrtime end_time = gethrtime();
-    if (dladdr(this_fn, &info)) {
-        printf("[%s] ",info.dli_sname ? info.dli_sname : "unknown");
-        printf("[%s]\n",info.dli_fname ? info.dli_fname : "unknown");
+    // Translate addresses of current function
+
+    if (dladdr(this_fn, &info_current)) {
+        printf("[%s] ",info_current.dli_sname ? info_current.dli_sname : "unknown");
+        printf("[%s]\n",info_current.dli_fname ? info_current.dli_fname : "unknown");
     }
     FrameInformation &d = s.getFrame(s.top());
     d.end_time = end_time;
     printf("Time taken by function is %llu\n", d.end_time - d.start_time);
+
+
+    // Translate addresses of calling function
+    Dl_info info_parent;
+    printf("parent info \n");
+    char buffer[300];
+    sprintf(buffer, " %s -> %s [label=\"Time: %llu\"]\n", d.function_name, info_current.dli_sname, d.end_time - d.start_time);
+    fputs(buffer, FunctionTracer::fp);
     s.pop();
 
 }

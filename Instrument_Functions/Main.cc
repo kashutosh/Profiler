@@ -40,9 +40,10 @@ int main() {
 
     //Aux a;
     //a.init();
+    FunctionTracer::stopTracer();
     delete c;
-    extern Stack s;
-    s.printStackFrames("/tmp/foo.out");
+//    extern Stack s;
+//    s.printStackFrames("/tmp/foo.out");
     return 0;
 }
 
