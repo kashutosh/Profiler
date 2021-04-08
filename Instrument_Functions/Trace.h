@@ -6,37 +6,39 @@
 #include <iostream>
 #include <stdlib.h>
 #include <pthread.h>
+#include <string.h>
 
 extern int initialization_complete;
 
 
 // We intend to use FrameInformation in __cyg_profile functions
 // So DO NOT USE STL here
-typedef unsigned int uint;
-typedef unsigned long int ulint;
+//typedef int uint;
+typedef long int ulint;
 typedef unsigned long long int hrtime;
 #define MAX_NAME_LEN 200
 struct FrameInformation {
     public:
         uint threadid;
-        ulint address;
-        ulint call_site; 
+        void *address;
+        void *call_site; 
         hrtime start_time;
         hrtime end_time;
-
         char function_name[MAX_NAME_LEN];
         //create a place for timestamp
         
         FrameInformation(uint threadid_ = 0, 
-                         uint address_ = 0, 
-                         uint call_site_ = 0, 
+                         void *address_ = 0, 
+                         void* call_site_ = 0, 
                          hrtime start_time_ = 0, 
-                         hrtime end_time_ = 0) __attribute__((no_instrument_function)) { 
+                         hrtime end_time_ = 0,
+                         const char *function_name_ = "dummyname") __attribute__((no_instrument_function)) { 
             this->threadid = threadid_; 
             this->address = address_;
             this->call_site = call_site_;
             this->start_time = start_time_;
             this->end_time = end_time_;
+            strcpy(this->function_name, function_name_);
         }
         // One can call only such code that does not perform any 
         //    function calls or standard library calls from over here
@@ -44,8 +46,10 @@ struct FrameInformation {
         void print () __attribute__((no_instrument_function)) { 
             // Thankfully pthread functions are not instrumentable
             // Perhaps because they are glibc functions?
-            printf("In function \nthread id = %lu\n", pthread_self());
-            this->threadid = pthread_self();
+            printf("------------------------------------------\n");
+            printf("threadid: %u , address: %p, call_site: %p, start_time: %llu, function_name: %s \n", threadid, address, call_site, start_time, function_name);
+            printf("------------------------------------------\n");
+            
         }
 };
 
@@ -80,7 +84,9 @@ private:
     FunctionTracer(FunctionTracer &);
     FunctionTracer &operator = (FunctionTracer &);
 public:
-    static void initializeTracer();
+    static FILE *fp;
+    static bool initializeTracer();
+    static bool stopTracer();
 };
 
 #endif

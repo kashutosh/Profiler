@@ -18,7 +18,10 @@ public:
     ~C() {
 
     }
+    void internal() { cout << "This is an internal function " << endl; }
     void printC() {
+
+        internal();
         cout << "Printing C " << endl;
         vector<int> v;
         v.push_back(10); 
@@ -40,9 +43,10 @@ int main() {
 
     //Aux a;
     //a.init();
+    FunctionTracer::stopTracer();
     delete c;
-    extern Stack s;
-    s.printStackFrames("/tmp/foo.out");
+//    extern Stack s;
+//    s.printStackFrames("/tmp/foo.out");
     return 0;
 }
 

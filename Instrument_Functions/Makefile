@@ -11,20 +11,20 @@ $(TR).a : $(TR).o
 	ar rvs $(TR).a $(TR).o 
 
 $(TR).o : $(TR).cc $(TR).h
-	g++ -c -finstrument-functions $(TR).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include/c++
+	g++ -c -g -finstrument-functions $(TR).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include/c++
 
 $(MN).o : $(MN).cc
 	# It is mandatory to call finstrument-functions on main
-	g++ -c -finstrument-functions $(MN).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include/c++
+	g++ -c -g -finstrument-functions $(MN).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include/c++
 
 $(AX).o : $(AX).cc
-	g++ -c -finstrument-functions $(AX).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include/c++
+	g++ -c -g -finstrument-functions $(AX).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include/c++
 
 $(ST).o : $(ST).cc $(TR).h
-	g++ -c -finstrument-functions $(ST).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include/c++
+	g++ -c -g -finstrument-functions $(ST).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include/c++
 
 $(FTR).o : $(FTR).cc $(TR).h
-	g++ -c $(FTR).cc -rdynamic 
+	g++ -c -g $(FTR).cc -rdynamic 
 
 
 clean :
