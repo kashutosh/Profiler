@@ -38,7 +38,7 @@ struct FrameInformation {
             this->call_site = call_site_;
             this->start_time = start_time_;
             this->end_time = end_time_;
-            strcpy(this->function_name, function_name_);
+            strcpy(this->function_name, function_name);
         }
         // One can call only such code that does not perform any 
         //    function calls or standard library calls from over here

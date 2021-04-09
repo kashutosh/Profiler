@@ -30,6 +30,7 @@ bool FunctionTracer::initializeTracer() {
     }
 
     fputs("digraph { \n", fp);
+<<<<<<< HEAD
     fputs("node [ shape=record ];\n", fp);
     // Push one dummy frame for main
 
@@ -41,6 +42,10 @@ bool FunctionTracer::initializeTracer() {
     strcpy(f.function_name, "main");
     printf("Main Name Pushed is %s\n", f.function_name);
     s.push(f);
+=======
+    // Push one dummy frame for main
+    s.push(FrameInformation());
+>>>>>>> 7c8383299da789851ab84381d96aa42fbbb9ea09
     initialization_complete = 1;
     return true;
 }
