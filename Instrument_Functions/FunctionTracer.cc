@@ -41,6 +41,7 @@ bool FunctionTracer::initializeTracer() {
     strcpy(f.function_name, "main");
     printf("Main Name Pushed is %s\n", f.function_name);
     s.push(f);
+    // Push one dummy frame for main
     initialization_complete = 1;
     return true;
 }

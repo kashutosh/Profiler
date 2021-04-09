@@ -56,7 +56,7 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
     }
     FrameInformation d (threadid, address, call_site_addr, start_time, end_time);
     strcpy(d.function_name, info.dli_sname);
-    d.print();   
+    //d.print();
     s.push(d);
 }
 
