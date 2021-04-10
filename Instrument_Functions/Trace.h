@@ -17,6 +17,7 @@ extern int initialization_complete;
 typedef long int ulint;
 typedef unsigned long long int hrtime;
 #define MAX_NAME_LEN 200
+#define MAX_LIBNAME_LEN 200
 struct FrameInformation {
     public:
         uint threadid;
@@ -25,6 +26,8 @@ struct FrameInformation {
         hrtime start_time;
         hrtime end_time;
         char function_name[MAX_NAME_LEN];
+        char library_name[MAX_LIBNAME_LEN];
+        int id;
         //create a place for timestamp
         
         FrameInformation(uint threadid_ = 0, 
@@ -32,13 +35,17 @@ struct FrameInformation {
                          void* call_site_ = 0, 
                          hrtime start_time_ = 0, 
                          hrtime end_time_ = 0,
-                         const char *function_name_ = "dummyname") __attribute__((no_instrument_function)) { 
+                         const char *function_name_ = "dummyname",
+                         const char *library_name_= "dummyname",
+                         const int id_ = 0 ) __attribute__((no_instrument_function)) { 
             this->threadid = threadid_; 
             this->address = address_;
             this->call_site = call_site_;
             this->start_time = start_time_;
             this->end_time = end_time_;
             strcpy(this->function_name, function_name);
+            strcpy(this->library_name, library_name_);
+            this->id = id_;
         }
         // One can call only such code that does not perform any 
         //    function calls or standard library calls from over here
@@ -87,6 +94,7 @@ public:
     static FILE *fp;
     static bool initializeTracer();
     static bool stopTracer();
+    static int id;
 };
 
 #endif

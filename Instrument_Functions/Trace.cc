@@ -36,6 +36,7 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
 {
     if (!initialization_complete) return;
 
+    FunctionTracer::id++;
     // Do not do address translations right here?
     Dl_info info;
     printf("entering %p @@", (void*)(int*)this_fn);
@@ -56,6 +57,8 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
     }
     FrameInformation d (threadid, address, call_site_addr, start_time, end_time);
     strcpy(d.function_name, info.dli_sname);
+    strcpy(d.library_name, info.dli_fname);
+    d.id = FunctionTracer::id;
     //d.print();
     s.push(d);
 }
@@ -74,23 +77,37 @@ void __cyg_profile_func_exit(void* this_fn, void* call_site)
         printf("[%s]\n",info_current.dli_fname ? info_current.dli_fname : "unknown");
     }
     FrameInformation &d = s.getFrame(s.top()-1);
-    d.end_time = end_time;
-    printf("Time taken by function is %llu\n", d.end_time - d.start_time);
+    FrameInformation &top_frame = s.getFrame(s.top());
+    top_frame.end_time = end_time;
+    printf("Time taken by function is %llu\n", top_frame.end_time - top_frame.start_time);
 
 
     // Translate addresses of calling function
-    Dl_info info_parent;
-    printf("parent info \n");
-    char buffer[300];
-    //sprintf(buffer, " %s -> %s [label=\"Time: %llu\"]\n", d.function_name, info_current.dli_sname, d.end_time - d.start_time);
-    //fputs(buffer, FunctionTracer::fp);
+//    Dl_info info_parent;
+//    printf("parent info \n");
+    char buffer[2000];
+/**
+*
+    sprintf(buffer, " %s -> %s [label=\"Time: %llu\"]\n", d.function_name, info_current.dli_sname, d.end_time - d.start_time);
+    fputs(buffer, FunctionTracer::fp);
 
-    sprintf(buffer, " p%p [label= \"{%s | %llu}\" ];\n", d.address, d.function_name, d.end_time-d.start_time);
+    Perhaps print another node for metadata. We are interested only in edges?
+
+    sprintf(buffer, " p%p [label=\"%s\" ]; \n",  this_fn, info_current.dli_sname);
     fputs(buffer, FunctionTracer::fp);
-    sprintf(buffer, " p%p -> p%p \n", d.address, this_fn);
-    fputs(buffer, FunctionTracer::fp);
-//    sprintf(buffer, " p%p [label=\"%s\" ]; \n",  this_fn, info_current.dli_sname);
+**/
+
+     // Consider Enabling these lines.
+//    sprintf(buffer, " p%d [label= \"{-1 %s | %llu}\" ];\n", d.id, d.function_name, top_frame.end_time-top_frame.start_time);
 //    fputs(buffer, FunctionTracer::fp);
+
+    sprintf(buffer, " p%d -> p%d [label=\"%d\"] \n", d.id, top_frame.id, top_frame.id);
+    fputs(buffer, FunctionTracer::fp);
+
+
+    sprintf(buffer, " p%d [label= \"{%s | Threadid: %u | Time: %llu | Lib: %s}\" ];\n", top_frame.id, top_frame.function_name, top_frame.threadid, top_frame.end_time-top_frame.start_time, top_frame.library_name);
+    fputs(buffer, FunctionTracer::fp);
+
     s.pop();
 
 }

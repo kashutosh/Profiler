@@ -6,10 +6,16 @@ using namespace FlightRecorder;
 hrtime gethrtime(void);
 
 FILE * FunctionTracer::fp;
+int FunctionTracer::id = 0;
 bool FunctionTracer::stopTracer() {
     if (fp == NULL) {
         return false;
     }
+    char buffer[300];
+    extern Stack s;
+    FrameInformation &top_frame = s.getFrame(s.top());
+    sprintf(buffer, " p%d [label= \"{%s | %llu}\" ];\n", top_frame.id, top_frame.function_name, top_frame.end_time-top_frame.start_time);
+    fputs(buffer, FunctionTracer::fp);
     fputs("}\n", fp);
     fclose(fp);
     return true;
