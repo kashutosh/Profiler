@@ -32,7 +32,6 @@ public:
 int main() {
     // How would somebody detect that initialization happened here?
     FunctionTracer::initializeTracer(2.0);
-    printf("main is called \n");
     // There is practically no difference in calling 
     // callout (from external file) and foo (from same file)
     // here
@@ -45,8 +44,6 @@ int main() {
     //a.init();
     FunctionTracer::stopTracer();
     delete c;
-//    extern Stack s;
-//    s.printStackFrames("/tmp/foo.out");
     return 0;
 }
 
