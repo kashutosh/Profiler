@@ -6,6 +6,7 @@
 
 #include "Trace.h"
 #include "FunctionTracer.h"
+#include <cxxabi.h>
 
 //typedef unsigned long long hrtime;
 #ifdef __cplusplus
@@ -105,7 +106,11 @@ void __cyg_profile_func_exit(void* this_fn, void* call_site)
     fputs(buffer, FunctionTracer::fp);
 
 
-    sprintf(buffer, " p%d [label= \"{%s | Threadid: %u | Time: %.3f ms| Lib: %s}\" ];\n", top_frame.id, top_frame.function_name, top_frame.threadid, (top_frame.end_time-top_frame.start_time)/(FunctionTracer::clock_speed*1000*1000), top_frame.library_name);
+    // THIS IS IMPORTANT PRINT LINE
+    //sprintf(buffer, " p%d [label= \"{%s | Threadid: %u | Time: %.3f ms| Lib: %s }\" ];\n", top_frame.id, top_frame.function_name, top_frame.threadid, (top_frame.end_time-top_frame.start_time)/(FunctionTracer::clock_speed*1000*1000), top_frame.library_name);
+    int status;
+    // MODIFIED FOR DEMANGLED NAME
+    sprintf(buffer, " p%d [label= \"{%s | Threadid: %u | Time: %.3f ms| Lib: %s }\" ];\n", top_frame.id, abi::__cxa_demangle(top_frame.function_name, 0, 0, &status), top_frame.threadid, (top_frame.end_time-top_frame.start_time)/(FunctionTracer::clock_speed*1000*1000), top_frame.library_name);
     fputs(buffer, FunctionTracer::fp);
 
     s.pop();

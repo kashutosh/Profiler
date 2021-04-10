@@ -17,7 +17,6 @@ bool FunctionTracer::stopTracer() {
     extern Stack s;
     FrameInformation &top_frame = s.getFrame(s.top());
     hrtime end_time = gethrtime();
-    top_frame.end_time = end_time;
     sprintf(buffer, " p%d [label= \"{%s |Time: %.3f ms}\" ];\n", top_frame.id, top_frame.function_name, (top_frame.end_time-top_frame.start_time)/(FunctionTracer::clock_speed*1000*1000));
     fputs(buffer, FunctionTracer::fp);
     fputs("}\n", fp);
