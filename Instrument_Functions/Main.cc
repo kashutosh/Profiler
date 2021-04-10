@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Trace.h"
 #include <vector>
-#include "Aux.h"
+#include "FunctionTracer.h"
 using namespace std;
 extern int global;
 int initialization_complete = 0;
@@ -31,7 +31,7 @@ public:
 
 int main() {
     // How would somebody detect that initialization happened here?
-    FunctionTracer::initializeTracer();
+    FunctionTracer::initializeTracer(2.0);
     printf("main is called \n");
     // There is practically no difference in calling 
     // callout (from external file) and foo (from same file)

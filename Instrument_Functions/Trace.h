@@ -85,16 +85,5 @@ class Stack {
 
 };
 
-class FunctionTracer {
-private:
-    FunctionTracer();
-    FunctionTracer(FunctionTracer &);
-    FunctionTracer &operator = (FunctionTracer &);
-public:
-    static FILE *fp;
-    static bool initializeTracer();
-    static bool stopTracer();
-    static int id;
-};
 
 #endif

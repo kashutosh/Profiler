@@ -1,6 +1,6 @@
 TR=Trace
 MN=Main
-AX=Aux
+AX=Auxillary
 ST=Stack
 FTR=FunctionTracer
 

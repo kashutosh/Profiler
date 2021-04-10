@@ -1,4 +1,5 @@
 #include "Trace.h"
+#include "FunctionTracer.h"
 #include "../Exception.h"
 
 using namespace FlightRecorder;
@@ -7,6 +8,7 @@ hrtime gethrtime(void);
 
 FILE * FunctionTracer::fp;
 int FunctionTracer::id = 0;
+float FunctionTracer::clock_speed = 2.0;
 bool FunctionTracer::stopTracer() {
     if (fp == NULL) {
         return false;
@@ -14,7 +16,9 @@ bool FunctionTracer::stopTracer() {
     char buffer[300];
     extern Stack s;
     FrameInformation &top_frame = s.getFrame(s.top());
-    sprintf(buffer, " p%d [label= \"{%s | %llu}\" ];\n", top_frame.id, top_frame.function_name, top_frame.end_time-top_frame.start_time);
+    hrtime end_time = gethrtime();
+    top_frame.end_time = end_time;
+    sprintf(buffer, " p%d [label= \"{%s |Time: %.3f ms}\" ];\n", top_frame.id, top_frame.function_name, (top_frame.end_time-top_frame.start_time)/(FunctionTracer::clock_speed*1000*1000));
     fputs(buffer, FunctionTracer::fp);
     fputs("}\n", fp);
     fclose(fp);
@@ -22,11 +26,13 @@ bool FunctionTracer::stopTracer() {
 }
  
 
-bool FunctionTracer::initializeTracer() {
+bool FunctionTracer::initializeTracer(float clock_speed_) {
     extern Stack s;
     extern int initialization_complete;
 
     // Open the file handle and start writing a graph into it
+ 
+    clock_speed = clock_speed_;
 
     fp = fopen ("/tmp/callstack.dot", "w");
 
