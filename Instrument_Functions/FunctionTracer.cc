@@ -1,6 +1,7 @@
 #include "Trace.h"
 #include "FunctionTracer.h"
 #include "../Exception.h"
+#include <cxxabi.h>
 
 using namespace FlightRecorder;
 
@@ -15,9 +16,14 @@ bool FunctionTracer::stopTracer() {
     }
     char buffer[300];
     extern Stack s;
-    FrameInformation &top_frame = s.getFrame(s.top());
+    uint threadid = pthread_self();
     hrtime end_time = gethrtime();
-    sprintf(buffer, " p%d [label= \"{%s |Time: %.3f ms}\" ];\n", top_frame.id, top_frame.function_name, (top_frame.end_time-top_frame.start_time)/(FunctionTracer::clock_speed*1000*1000));
+    FrameInformation &top_frame = s.getFrame(s.top());
+    top_frame.end_time = end_time;
+    top_frame.threadid = threadid;
+    //sprintf(buffer, " p%d [label= \"{%s |Time: %.3f ms}\" ];\n", top_frame.id, top_frame.function_name, (top_frame.end_time-top_frame.start_time)/(FunctionTracer::clock_speed*1000*1000));
+    int status;
+    sprintf(buffer, " p%d [label= \"{%s | Threadid: %u | Time: %.3f ms| Lib: %s }\" ];\n", top_frame.id, abi::__cxa_demangle(top_frame.function_name, 0, 0, &status), top_frame.threadid, (top_frame.end_time-top_frame.start_time)/(FunctionTracer::clock_speed*1000*1000), top_frame.library_name);
     fputs(buffer, FunctionTracer::fp);
     fputs("}\n", fp);
     fclose(fp);

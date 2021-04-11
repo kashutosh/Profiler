@@ -5,7 +5,7 @@ ST=Stack
 FTR=FunctionTracer
 
 all : $(TR).a $(MN).o $(AX).o $(ST).o $(FTR).o
-	g++ $(MN).o $(TR).a $(AX).o $(ST).o $(FTR).o -ldl -o $(FTR) -rdynamic
+	g++ $(MN).o $(TR).a $(AX).o $(ST).o $(FTR).o -ldl -o $(FTR) -rdynamic -lpthread
 
 $(TR).a : $(TR).o
 	ar rvs $(TR).a $(TR).o 
@@ -15,7 +15,7 @@ $(TR).o : $(TR).cc $(TR).h
 
 $(MN).o : $(MN).cc
 	# It is mandatory to call finstrument-functions on main
-	g++ -c -g -finstrument-functions $(MN).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include/c++
+	g++ -c -g -finstrument-functions $(MN).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include/c++ -fpermissive 
 
 $(AX).o : $(AX).cc
 	g++ -c -g -finstrument-functions $(AX).cc -rdynamic -finstrument-functions-exclude-file-list=/usr/include/c++
