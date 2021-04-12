@@ -1,24 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-typedef unsigned int uint;
-#define NUM_THREADS_PRIME 11
-
-struct Node{
-    uint key;
-    uint hash_value;
-    int index;
-    struct Node *next;
-} ;
-
-struct Bucket{
-    struct Node *chain;
-};
-
-typedef struct Node Node;
-typedef struct Bucket Bucket;
-static int index = -1;
-
+#include "hashtable.h"
 Bucket hashtable[NUM_THREADS_PRIME];
 
 int initializeBuckets() {
@@ -122,8 +102,8 @@ int main() {
     printf("find(21) = %d \n", find(21));
     printf("find(20) = %d \n", find(20));
     printf("find(30) = %d \n", find(30));
-    printf("find(30) = %d \n", find(31));
-    printf("find(30) = %d \n", find(34));
+    printf("find(31) = %d \n", find(31));
+    printf("find(34) = %d \n", find(34));
     printf("find(35) = %d \n", find(35));
     printHashTable();
     return 0;
