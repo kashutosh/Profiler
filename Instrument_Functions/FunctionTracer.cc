@@ -29,6 +29,8 @@ bool FunctionTracer::stopTracer() {
     fputs(buffer, FunctionTracer::fp);
     fputs("}\n", fp);
     fclose(fp);
+
+    printf("Number of stacks created were %d\n", FlightRecorder::getNumKeysStored());
     return true;
 }
  

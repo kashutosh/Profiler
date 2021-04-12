@@ -60,6 +60,16 @@ int find(uint key) {
 
 int insert (uint key) {
     uint hash_value = FlightRecorder::hash(key);
+
+    pthread_mutex_lock(&hashtable_lock);
+    // When inserting, always do a find first and iff it returns
+    // false, then only insert. Otherwise return
+    
+    int found_idx = FlightRecorder::find(key);
+    if (found_idx != -1) {
+        pthread_mutex_unlock(&hashtable_lock);
+        return found_idx;
+    }
     idx++;
     // Search for this key in the hash table
     Bucket *bucket = &hashtable[hash_value];
@@ -85,6 +95,7 @@ int insert (uint key) {
  
     }
     // On insertion, return which bucket was the key inserted into
+    pthread_mutex_unlock(&hashtable_lock);
     return idx;
     
 }
@@ -100,6 +111,13 @@ int getNumKeysStored() {
         }
     }
     return counter;
+}
+
+int destroyHashtable() {
+    pthread_mutex_lock(&hashtable_lock);
+    // Go on freeing up nodes allocated. Err, how?
+    pthread_mutex_unlock(&hashtable_lock);
+    return 0;
 }
 
 
