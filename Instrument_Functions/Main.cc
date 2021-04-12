@@ -4,6 +4,7 @@
 #include "FunctionTracer.h"
 #include <unistd.h>
 #include <pthread.h>
+#include "hashtable.h"
 
 using namespace std;
 extern int global;
@@ -95,6 +96,7 @@ int main() {
     }
 
     FunctionTracer::stopTracer();
+    printf("Number of Stacks Created are %d\n", FlightRecorder::getNumKeysStored());
     delete c;
     return 0;
 }

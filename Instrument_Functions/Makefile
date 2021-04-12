@@ -3,9 +3,10 @@ MN=Main
 AX=Auxillary
 ST=Stack
 FTR=FunctionTracer
+HST=hashtable
 
-all : $(TR).a $(MN).o $(AX).o $(ST).o $(FTR).o
-	g++ $(MN).o $(TR).a $(AX).o $(ST).o $(FTR).o -ldl -o $(FTR) -rdynamic -lpthread
+all : $(TR).a $(MN).o $(AX).o $(ST).o $(FTR).o $(HST).o
+	g++ $(MN).o $(TR).a $(AX).o $(ST).o $(FTR).o $(HST).o -ldl -o $(FTR) -rdynamic -lpthread
 
 $(TR).a : $(TR).o
 	ar rvs $(TR).a $(TR).o 
@@ -26,6 +27,8 @@ $(ST).o : $(ST).cc $(TR).h
 $(FTR).o : $(FTR).cc $(TR).h
 	g++ -c -g $(FTR).cc -rdynamic 
 
+$(HST).o : $(HST).cc $(HST).h
+	g++ -c -g $(HST).cc -rdynamic 
 
 clean :
 	rm $(TR).a $(TR).o $(MN).o out $(AX).o $(AX).a

@@ -8,6 +8,10 @@
 #include "FunctionTracer.h"
 #include <cxxabi.h>
 
+#include "hashtable.h"
+using namespace FlightRecorder;
+#define MAX_THREADS_TO_TRACE 71
+
 //typedef unsigned long long hrtime;
 #ifdef __cplusplus
 using namespace std;
@@ -32,6 +36,8 @@ extern "C"
 
 
 Stack s;
+
+Stack stacks[MAX_THREADS_TO_TRACE];
 // When we enter the function, this block of code executes
 void __cyg_profile_func_enter(void* this_fn, void* call_site)
 {
@@ -61,7 +67,14 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
     strcpy(d.library_name, info.dli_fname);
     d.id = FunctionTracer::id;
     //d.print();
+
+    // Find an identifier of Stack on which this frame should be pushed
+    int idx = FlightRecorder::find(threadid);
+    if (idx == -1 ) {
+        idx = FlightRecorder::insert(threadid);
+    }
     s.push(d);
+    stacks[idx].push(d);
 }
 
 void __cyg_profile_func_exit(void* this_fn, void* call_site)
@@ -111,6 +124,9 @@ void __cyg_profile_func_exit(void* this_fn, void* call_site)
     // MODIFIED FOR DEMANGLED NAME
     sprintf(buffer, " p%d [label= \"{%s | Threadid: %u | Time: %.3f ms| Lib: %s }\" ];\n", top_frame.id, abi::__cxa_demangle(top_frame.function_name, 0, 0, &status), top_frame.threadid, (top_frame.end_time-top_frame.start_time)/(FunctionTracer::clock_speed*1000*1000), top_frame.library_name);
     fputs(buffer, FunctionTracer::fp);
+
+    int idx = FlightRecorder::find(top_frame.threadid);
+    stacks[idx].pop();
 
     s.pop();
 

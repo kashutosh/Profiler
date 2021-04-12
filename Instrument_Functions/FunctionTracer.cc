@@ -1,6 +1,7 @@
 #include "Trace.h"
 #include "FunctionTracer.h"
 #include "../Exception.h"
+#include "hashtable.h"
 #include <cxxabi.h>
 
 using namespace FlightRecorder;
@@ -10,6 +11,7 @@ hrtime gethrtime(void);
 FILE * FunctionTracer::fp;
 int FunctionTracer::id = 0;
 float FunctionTracer::clock_speed = 2.0;
+extern Stack stacks[71];
 bool FunctionTracer::stopTracer() {
     if (fp == NULL) {
         return false;
@@ -35,6 +37,8 @@ bool FunctionTracer::initializeTracer(float clock_speed_) {
     extern Stack s;
     extern int initialization_complete;
 
+    FlightRecorder::initializeBuckets();
+
     // Open the file handle and start writing a graph into it
  
     clock_speed = clock_speed_;
@@ -58,6 +62,10 @@ bool FunctionTracer::initializeTracer(float clock_speed_) {
     strcpy(f.function_name, "main");
     printf("Main Name Pushed is %s\n", f.function_name);
     s.push(f);
+
+    for (int i=0; i<11; i++) {
+        stacks[i].push(f);
+    }
     initialization_complete = 1;
     return true;
 }

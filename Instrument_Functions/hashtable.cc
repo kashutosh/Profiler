@@ -1,14 +1,17 @@
 #include "hashtable.h"
-Bucket hashtable[NUM_THREADS_PRIME];
+
+namespace FlightRecorder {
+static Bucket hashtable[NUM_THREADS_PRIME];
 
 int initializeBuckets() {
+    printf("Initializing buckets \n");
     for (int i=0; i<NUM_THREADS_PRIME; i++) {
         hashtable[i].chain = NULL;
     }
     return 0;
 }
 
-uint hash(int key) {
+uint hash(uint key) {
     return key%NUM_THREADS_PRIME;
 }
 
@@ -29,34 +32,35 @@ int printHashTable() {
 
 int find(uint key) {
     // find whether the given key exists or not
-    // if it exists, then return index for it
-    // A find function should return index of given key
+    // if it exists, then return idx for it
+    // A find function should return idx of given key
     // or return a -1 when none found
 
-    int index_to_search = -1;
+    int idx_to_search = -1;
 
-    // Find hash key and search in this hash key if this index exists
+    // Find hash key and search in this hash key if this idx exists
 
-    uint hash_value = hash(key);
+    uint hash_value = FlightRecorder::hash(key);
+    printf("hash_value is %u\n", hash_value);
     Bucket *bucket = &hashtable[hash_value];
     if (bucket->chain == NULL ){
-        return index_to_search;
+        return idx_to_search;
     }
     else {
         Node *tail= bucket->chain;
         while ((tail->key != key) || (tail == NULL)) 
             tail = tail->next;
         if (tail->key == key) {
-            return tail->index;
+            return tail->idx;
         }
     }
-    return index_to_search;
+    return idx_to_search;
 
 }
 
 int insert (uint key) {
-    uint hash_value = hash(key);
-    index++;
+    uint hash_value = FlightRecorder::hash(key);
+    idx++;
     // Search for this key in the hash table
     Bucket *bucket = &hashtable[hash_value];
     if (bucket->chain == NULL ){
@@ -64,7 +68,7 @@ int insert (uint key) {
         Node *node = (Node *)malloc (sizeof(Node));
         node->key = key;
         node->hash_value = hash_value;
-        node->index = index;
+        node->idx = idx;
         node->next = NULL;
         bucket->chain = node;
     }
@@ -75,42 +79,60 @@ int insert (uint key) {
         Node *node = (Node *)malloc (sizeof(Node));
         node->key = key;
         node->hash_value = hash_value;
-        node->index = index;
+        node->idx = idx;
         node->next = NULL;
         tail->next = node;
  
     }
     // On insertion, return which bucket was the key inserted into
-    return index;
+    return idx;
     
 }
+int getNumKeysStored() {
+    int counter = 0;
+    for (int i=0; i<NUM_THREADS_PRIME; i++) {
+        Node *chain = hashtable[i].chain;
+        if (chain != NULL ) {
+            while (chain!= NULL) {
+                chain = chain->next;
+                counter++;
+            }
+        }
+    }
+    return counter;
+}
 
+
+}
+
+/*
 int main() {
-    initializeBuckets();
+    FlightRecorder::initializeBuckets();
     int threadid;
-    threadid = insert(10);
+    threadid = FlightRecorder::insert(10);
     printf("Got threadid %d for key 10 \n", threadid);
-    threadid = insert(21);
+    threadid = FlightRecorder::insert(21);
     printf("Got threadid %d for key 10 \n", threadid);
-    threadid = insert(20);
+    threadid = FlightRecorder::insert(20);
     printf("Got threadid %d for key 10 \n", threadid);
-    threadid = insert(20);
+    threadid = FlightRecorder::insert(20);
     printf("Got threadid %d for key 10 \n", threadid);
-    threadid = insert(31);
+    threadid = FlightRecorder::insert(31);
     printf("Got threadid %d for key 10 \n", threadid);
-    threadid = insert(34);
+    threadid = FlightRecorder::insert(34);
     printf("Got threadid %d for key 10 \n", threadid);
-    printf("find(10) = %d \n", find(10));
-    printf("find(21) = %d \n", find(21));
-    printf("find(20) = %d \n", find(20));
-    printf("find(30) = %d \n", find(30));
-    printf("find(31) = %d \n", find(31));
-    printf("find(34) = %d \n", find(34));
-    printf("find(35) = %d \n", find(35));
-    printHashTable();
+    printf("find(10) = %d \n", FlightRecorder::find(10));
+    printf("find(21) = %d \n", FlightRecorder::find(21));
+    printf("find(20) = %d \n", FlightRecorder::find(20));
+    printf("find(30) = %d \n", FlightRecorder::find(30));
+    printf("find(31) = %d \n", FlightRecorder::find(31));
+    printf("find(34) = %d \n", FlightRecorder::find(34));
+    printf("find(35) = %d \n", FlightRecorder::find(35));
+    FlightRecorder::printHashTable();
     return 0;
 }
 
+*/
 
 // Ideally, we want to map tid to a number between 0-n
 // 120391034 -> hash_value -> 0 (Key, Index)
