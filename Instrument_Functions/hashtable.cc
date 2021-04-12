@@ -5,6 +5,7 @@ int initializeBuckets() {
     for (int i=0; i<NUM_THREADS_PRIME; i++) {
         hashtable[i].chain = NULL;
     }
+    return 0;
 }
 
 uint hash(int key) {
@@ -23,6 +24,7 @@ int printHashTable() {
             }
         }
     }
+    return 0;
 }
 
 int find(uint key) {
