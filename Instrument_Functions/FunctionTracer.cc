@@ -12,6 +12,7 @@ FILE * FunctionTracer::fp;
 int FunctionTracer::id = 0;
 float FunctionTracer::clock_speed = 2.0;
 extern Stack stacks[71];
+int initialization_complete = 0;
 bool FunctionTracer::stopTracer() {
     if (fp == NULL) {
         return false;

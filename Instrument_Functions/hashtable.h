@@ -20,7 +20,6 @@ struct Bucket{
 typedef struct Node Node;
 typedef struct Bucket Bucket;
 static int idx = -1;
-pthread_mutex_t hashtable_lock;
 
 
 int initializeBuckets() __attribute__((no_instrument_function));

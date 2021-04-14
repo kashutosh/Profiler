@@ -63,8 +63,18 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
 //        printf("[%s]\n",info.dli_fname ? info.dli_fname : "unknown");
     }
     FrameInformation d (threadid, address, call_site_addr, start_time, end_time);
-    strcpy(d.function_name, info.dli_sname);
-    strcpy(d.library_name, info.dli_fname);
+    if (info.dli_sname) {
+        strcpy(d.function_name, info.dli_sname);
+    }
+    else {
+        strcpy(d.function_name, "unknown name");
+    }
+    if (info.dli_fname) {
+        strcpy(d.library_name, info.dli_fname);
+    }
+    else {
+        strcpy(d.library_name, "unknown lib");
+    }
     d.id = FunctionTracer::id;
     //d.print();
 

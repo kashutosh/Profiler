@@ -13,7 +13,7 @@ void callout4() {
 }
 void callout3() {
     cout << "Cout called from callout " << endl;
-    for (int i=0; i<10; i++) {
+    for (int i=0; i<4; i++) {
         v.push_back("foobar");
     }
     callout4();

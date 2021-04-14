@@ -7,7 +7,6 @@
 
 using namespace std;
 extern int global;
-int initialization_complete = 0;
 void callout();
 
 void foo() {

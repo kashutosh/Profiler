@@ -3,6 +3,7 @@
 namespace FlightRecorder {
 static Bucket hashtable[NUM_THREADS_PRIME];
 
+pthread_mutex_t hashtable_lock;
 int initializeBuckets() {
     printf("Initializing buckets \n");
     for (int i=0; i<NUM_THREADS_PRIME; i++) {
