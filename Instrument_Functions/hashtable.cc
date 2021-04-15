@@ -12,8 +12,13 @@ int initializeBuckets() {
     return 0;
 }
 
-uint hash(uint key) {
-    return key%NUM_THREADS_PRIME;
+Bucket *getBucket(int index) {
+    if (index > NUM_THREADS_PRIME || index <0) return NULL;
+    return &hashtable[index];
+}
+
+int hash(int key) {
+    return abs(key%NUM_THREADS_PRIME);
 }
 
 int printHashTable() {
@@ -31,36 +36,34 @@ int printHashTable() {
     return 0;
 }
 
-int find(uint key) {
-    // find whether the given key exists or not
-    // if it exists, then return idx for it
-    // A find function should return idx of given key
-    // or return a -1 when none found
-
-    int idx_to_search = -1;
+int find(int key) {
 
     // Find hash key and search in this hash key if this idx exists
 
-    uint hash_value = FlightRecorder::hash(key);
-    printf("hash_value is %u\n", hash_value);
+    int hash_value = FlightRecorder::hash(key);
+    printf("hash value for %d is %u\n", key, hash_value);
     Bucket *bucket = &hashtable[hash_value];
     if (bucket->chain == NULL ){
-        return idx_to_search;
+        printf("find is returning -1 for key=%d, hash_value=%d\n", key, hash_value);
+        return -1;
     }
     else {
         Node *tail= bucket->chain;
-        while ((tail->key != key) || (tail == NULL)) 
+        printf("First node's value is %d\n", tail->key);
+        while (tail != NULL) {
+            if (tail->key == key ) {
+                printf("Found the key at %d\n", tail->key);
+                return hash_value;
+            }
             tail = tail->next;
-        if (tail->key == key) {
-            return tail->idx;
         }
-    }
-    return idx_to_search;
+   }
+    return -1;
 
 }
 
-int insert (uint key) {
-    uint hash_value = FlightRecorder::hash(key);
+int insert (int key) {
+    int hash_value = FlightRecorder::hash(key);
 
     pthread_mutex_lock(&hashtable_lock);
     // When inserting, always do a find first and iff it returns
@@ -68,10 +71,10 @@ int insert (uint key) {
     
     int found_idx = FlightRecorder::find(key);
     if (found_idx != -1) {
+        printf ("Found that the key was already inserted at %u\n", found_idx);
         pthread_mutex_unlock(&hashtable_lock);
         return found_idx;
     }
-    idx++;
     // Search for this key in the hash table
     Bucket *bucket = &hashtable[hash_value];
     if (bucket->chain == NULL ){
@@ -79,25 +82,24 @@ int insert (uint key) {
         Node *node = (Node *)malloc (sizeof(Node));
         node->key = key;
         node->hash_value = hash_value;
-        node->idx = idx;
         node->next = NULL;
         bucket->chain = node;
     }
     else {
+        printf ("Found a non-empty bucket at %u\n", hash_value);
+        // When we enter here, we must necessarily have found = false, isn't it?
         Node *tail= bucket->chain;
         while (tail->next != NULL) tail = tail->next;
 
         Node *node = (Node *)malloc (sizeof(Node));
         node->key = key;
         node->hash_value = hash_value;
-        node->idx = idx;
         node->next = NULL;
         tail->next = node;
- 
     }
     // On insertion, return which bucket was the key inserted into
     pthread_mutex_unlock(&hashtable_lock);
-    return idx;
+    return hash_value;
     
 }
 int getNumKeysStored() {
@@ -124,37 +126,4 @@ int destroyHashtable() {
 
 }
 
-/*
-int main() {
-    FlightRecorder::initializeBuckets();
-    int threadid;
-    threadid = FlightRecorder::insert(10);
-    printf("Got threadid %d for key 10 \n", threadid);
-    threadid = FlightRecorder::insert(21);
-    printf("Got threadid %d for key 10 \n", threadid);
-    threadid = FlightRecorder::insert(20);
-    printf("Got threadid %d for key 10 \n", threadid);
-    threadid = FlightRecorder::insert(20);
-    printf("Got threadid %d for key 10 \n", threadid);
-    threadid = FlightRecorder::insert(31);
-    printf("Got threadid %d for key 10 \n", threadid);
-    threadid = FlightRecorder::insert(34);
-    printf("Got threadid %d for key 10 \n", threadid);
-    printf("find(10) = %d \n", FlightRecorder::find(10));
-    printf("find(21) = %d \n", FlightRecorder::find(21));
-    printf("find(20) = %d \n", FlightRecorder::find(20));
-    printf("find(30) = %d \n", FlightRecorder::find(30));
-    printf("find(31) = %d \n", FlightRecorder::find(31));
-    printf("find(34) = %d \n", FlightRecorder::find(34));
-    printf("find(35) = %d \n", FlightRecorder::find(35));
-    FlightRecorder::printHashTable();
-    return 0;
-}
-
-*/
-
-// Ideally, we want to map tid to a number between 0-n
-// 120391034 -> hash_value -> 0 (Key, Index)
-// 120391040 -> hash_value -> 1
-// 120391152 -> hash_value -> 2
 

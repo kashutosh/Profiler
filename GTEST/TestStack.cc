@@ -32,7 +32,7 @@ class StackTest : public ::testing::Test {
 TEST_F(StackTest, Test1) {
   EXPECT_NE(s1.numFrames(), 11);
   EXPECT_EQ(s1.numFrames(), 0);
-  Dummy d;
+  FrameInformation d;
   s1.push(d);
   EXPECT_EQ(s1.numFrames(), 1);
   s1.push(d);
@@ -42,7 +42,7 @@ TEST_F(StackTest, Test1) {
 
 
 TEST_F(StackTest, TestOverflow) {
-  Dummy d;
+  FrameInformation d;
   for (int i=0; i<MAX_STACK_DEPTH; i++)
       s1.push(d);
   EXPECT_EQ(s1.numFrames(), MAX_STACK_DEPTH);
@@ -59,11 +59,11 @@ TEST_F(StackTest, TestOverflow) {
 }
 
 TEST_F(StackTest, TestUnderflow) {
-  Dummy d;
+  FrameInformation d;
   s1.push(d);
   EXPECT_EQ(s1.numFrames(), 1);
   try {
-      Dummy d = s1.pop();
+      FrameInformation d = s1.pop();
       d = s1.pop();
   }
   catch (Exception &e) {

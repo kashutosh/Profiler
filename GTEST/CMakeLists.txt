@@ -13,7 +13,6 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-
 set(CMAKE_BINARY_DIR binary_tests/)
 
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -26,11 +25,13 @@ add_executable(  teststack  TestStack.cc ../Instrument_Functions/Stack.cc)
 add_executable(  testscopeprofiler  TestScopeProfiler.cc ../scope.cc ../ObjectStorage.cc ../MyObject.cc ../Object.cc)
 add_executable(  testobjectstorage TestObjectStorage.cc ../ObjectStorage.cc ../Object.cc)
 add_executable(  testkeyvaluestore TestKeyValueStore.cc ../KeyValueStore.cc)
+add_executable(  testhashtable TestHashtable.cc ../Instrument_Functions/hashtable.cc)
 target_link_libraries(hello gtest_main)
 target_link_libraries(teststack gtest_main)
 target_link_libraries(testscopeprofiler gtest_main)
 target_link_libraries(testobjectstorage gtest_main)
 target_link_libraries(testkeyvaluestore gtest_main)
+target_link_libraries(testhashtable gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(hello)
