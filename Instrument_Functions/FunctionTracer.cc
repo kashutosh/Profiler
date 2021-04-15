@@ -19,7 +19,7 @@ bool FunctionTracer::stopTracer() {
     }
     char buffer[300];
     extern Stack s;
-    uint threadid = pthread_self();
+    int threadid = pthread_self();
     hrtime end_time = gethrtime();
     FrameInformation &top_frame = s.getFrame(s.top());
     top_frame.end_time = end_time;

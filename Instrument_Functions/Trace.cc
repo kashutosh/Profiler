@@ -49,7 +49,7 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
 //    printf("entering %p @@", (void*)(int*)this_fn);
 //    printf(";call_site %p @@", (void*)(int*)call_site);
 
-    uint threadid = pthread_self();
+    int threadid = pthread_self();
     void *address = this_fn;
     void *call_site_addr = call_site;
     hrtime start_time = gethrtime();
