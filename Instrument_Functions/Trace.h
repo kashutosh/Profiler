@@ -16,11 +16,11 @@ extern int initialization_complete;
 //typedef int uint;
 typedef long int ulint;
 typedef unsigned long long int hrtime;
-#define MAX_NAME_LEN 200
+#define MAX_NAME_LEN 400
 #define MAX_LIBNAME_LEN 200
 struct FrameInformation {
     public:
-        uint threadid;
+        int threadid;
         void *address;
         void *call_site; 
         hrtime start_time;
@@ -30,7 +30,7 @@ struct FrameInformation {
         int id;
         //create a place for timestamp
         
-        FrameInformation(uint threadid_ = 0, 
+        FrameInformation(int threadid_ = 0, 
                          void *address_ = 0, 
                          void* call_site_ = 0, 
                          hrtime start_time_ = 0, 

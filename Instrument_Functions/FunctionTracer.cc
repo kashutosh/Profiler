@@ -11,17 +11,18 @@ hrtime gethrtime(void);
 FILE * FunctionTracer::fp;
 int FunctionTracer::id = 0;
 float FunctionTracer::clock_speed = 2.0;
-extern Stack stacks[71];
+extern Stack stacks[NUM_THREADS_PRIME];
 int initialization_complete = 0;
 bool FunctionTracer::stopTracer() {
     if (fp == NULL) {
         return false;
     }
-    char buffer[300];
+    char buffer[2000];
     extern Stack s;
-    uint threadid = pthread_self();
+    int threadid = pthread_self();
     hrtime end_time = gethrtime();
-    FrameInformation &top_frame = s.getFrame(s.top());
+    int idx = FlightRecorder::find(threadid);
+    FrameInformation &top_frame = stacks[idx].getFrame(stacks[idx].top());
     top_frame.end_time = end_time;
     top_frame.threadid = threadid;
     //sprintf(buffer, " p%d [label= \"{%s |Time: %.3f ms}\" ];\n", top_frame.id, top_frame.function_name, (top_frame.end_time-top_frame.start_time)/(FunctionTracer::clock_speed*1000*1000));
@@ -58,15 +59,17 @@ bool FunctionTracer::initializeTracer(float clock_speed_) {
     // Push one dummy frame for main
 
     FrameInformation f;
+    int threadid = pthread_self();
+    f.threadid = threadid;
     f.address = 0;
     hrtime start_time = gethrtime();
     f.start_time = start_time;
 
     strcpy(f.function_name, "main");
     printf("Main Name Pushed is %s\n", f.function_name);
-    s.push(f);
+    //s.push(f);
 
-    for (int i=0; i<11; i++) {
+    for (int i=0; i<71; i++) {
         stacks[i].push(f);
     }
     initialization_complete = 1;

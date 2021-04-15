@@ -35,7 +35,7 @@ extern "C"
 #endif
 
 
-Stack s;
+//Stack s;
 
 Stack stacks[MAX_THREADS_TO_TRACE];
 // When we enter the function, this block of code executes
@@ -49,7 +49,7 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
 //    printf("entering %p @@", (void*)(int*)this_fn);
 //    printf(";call_site %p @@", (void*)(int*)call_site);
 
-    uint threadid = pthread_self();
+    int threadid = pthread_self();
     void *address = this_fn;
     void *call_site_addr = call_site;
     hrtime start_time = gethrtime();
@@ -81,9 +81,12 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
     // Find an identifier of Stack on which this frame should be pushed
     int idx = FlightRecorder::find(threadid);
     if (idx == -1 ) {
+        printf("Found that threadid %d does not exist in hashtable when pushing a frame\n", threadid);
         idx = FlightRecorder::insert(threadid);
+        printf("Result of insert operation is: Threadid:%d, Index:%d\n", threadid, idx);
     }
-    s.push(d);
+    //s.push(d);
+    printf("Pushing with threadid %d\n", threadid);
     stacks[idx].push(d);
 }
 
@@ -100,8 +103,12 @@ void __cyg_profile_func_exit(void* this_fn, void* call_site)
 //        printf("[%s] ",info_current.dli_sname ? info_current.dli_sname : "unknown");
 //        printf("[%s]\n",info_current.dli_fname ? info_current.dli_fname : "unknown");
     }
-    FrameInformation &d = s.getFrame(s.top()-1);
-    FrameInformation &top_frame = s.getFrame(s.top());
+
+    
+    int threadid = pthread_self();
+    int idx = FlightRecorder::find(threadid);
+    FrameInformation &d = stacks[idx].getFrame(stacks[idx].top()-1);
+    FrameInformation &top_frame = stacks[idx].getFrame(stacks[idx].top());
     top_frame.end_time = end_time;
 
 
@@ -135,10 +142,15 @@ void __cyg_profile_func_exit(void* this_fn, void* call_site)
     sprintf(buffer, " p%d [label= \"{%s | Threadid: %u | Time: %.3f ms| Lib: %s }\" ];\n", top_frame.id, abi::__cxa_demangle(top_frame.function_name, 0, 0, &status), top_frame.threadid, (top_frame.end_time-top_frame.start_time)/(FunctionTracer::clock_speed*1000*1000), top_frame.library_name);
     fputs(buffer, FunctionTracer::fp);
 
-    int idx = FlightRecorder::find(top_frame.threadid);
+    idx = FlightRecorder::find(top_frame.threadid);
+
+    if (idx == -1 ) {
+        printf("Found that threadid %d does not exist in hashtable when popping a frame\n", top_frame.threadid);
+        exit(0);
+    }
     stacks[idx].pop();
 
-    s.pop();
+    //s.pop();
 
 }
 
