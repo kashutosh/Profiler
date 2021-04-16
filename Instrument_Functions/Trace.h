@@ -13,11 +13,12 @@ extern int initialization_complete;
 
 // We intend to use FrameInformation in __cyg_profile functions
 // So DO NOT USE STL here
-//typedef int uint;
-typedef long int ulint;
 typedef unsigned long long int hrtime;
 #define MAX_NAME_LEN 400
 #define MAX_LIBNAME_LEN 200
+
+// What information is pushed on stack when __cyg function is called?
+
 struct FrameInformation {
     public:
         int threadid;
@@ -59,6 +60,10 @@ struct FrameInformation {
             
         }
 };
+
+
+// MAX_STACK_DEPTH is defined to be 200
+// In real life, most code will not have this much of a deep stack
 
 #define MAX_STACK_DEPTH 200
 

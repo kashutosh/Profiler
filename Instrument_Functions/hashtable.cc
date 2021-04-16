@@ -1,9 +1,14 @@
 #include "hashtable.h"
 
 namespace FlightRecorder {
-static Bucket hashtable[NUM_THREADS_PRIME];
+//Notice that this is a global hashtable,
+// limited by its namespace only. Requires C++
 
+static Bucket hashtable[NUM_THREADS_PRIME];
+// This lock is to be used only when modifying the hashtable
+// which is very rare anyway
 pthread_mutex_t hashtable_lock;
+
 int initializeBuckets() {
     printf("Initializing buckets \n");
     for (int i=0; i<NUM_THREADS_PRIME; i++) {
@@ -17,6 +22,9 @@ Bucket *getBucket(int index) {
     return &hashtable[index];
 }
 
+// abs is used to convert -ve numbers to +ve
+// earlier, uints were used but they are quite 
+// tricky to handle
 int hash(int key) {
     return abs(key%NUM_THREADS_PRIME);
 }

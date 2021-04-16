@@ -12,7 +12,6 @@
 using namespace FlightRecorder;
 #define MAX_THREADS_TO_TRACE 71
 
-//typedef unsigned long long hrtime;
 #ifdef __cplusplus
 using namespace std;
 
@@ -46,8 +45,6 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
     FunctionTracer::id++;
     // Do not do address translations right here?
     Dl_info info;
-//    printf("entering %p @@", (void*)(int*)this_fn);
-//    printf(";call_site %p @@", (void*)(int*)call_site);
 
     int threadid = pthread_self();
     void *address = this_fn;
@@ -76,7 +73,6 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
         strcpy(d.library_name, "unknown lib");
     }
     d.id = FunctionTracer::id;
-    //d.print();
 
     // Find an identifier of Stack on which this frame should be pushed
     int idx = FlightRecorder::find(threadid);
@@ -85,7 +81,6 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
         idx = FlightRecorder::insert(threadid);
         printf("Result of insert operation is: Threadid:%d, Index:%d\n", threadid, idx);
     }
-    //s.push(d);
     printf("Pushing with threadid %d\n", threadid);
     stacks[idx].push(d);
 }
@@ -94,8 +89,6 @@ void __cyg_profile_func_exit(void* this_fn, void* call_site)
 {
     if (!initialization_complete) return;
     Dl_info info_current;
-//    printf("exiting %p @@", (void *)(int*)this_fn);
-//    printf(";call_site %p @@", (void*)(int*)call_site);
     hrtime end_time = gethrtime();
     // Translate addresses of current function
 
@@ -113,24 +106,7 @@ void __cyg_profile_func_exit(void* this_fn, void* call_site)
 
 
     // Translate addresses of calling function
-//    Dl_info info_parent;
-//    printf("parent info \n");
     char buffer[2000];
-/**
-*
-    sprintf(buffer, " %s -> %s [label=\"Time: %llu\"]\n", d.function_name, info_current.dli_sname, d.end_time - d.start_time);
-    fputs(buffer, FunctionTracer::fp);
-
-    Perhaps print another node for metadata. We are interested only in edges?
-
-    sprintf(buffer, " p%p [label=\"%s\" ]; \n",  this_fn, info_current.dli_sname);
-    fputs(buffer, FunctionTracer::fp);
-**/
-
-     // Consider Enabling these lines.
-//    sprintf(buffer, " p%d [label= \"{-1 %s | %llu}\" ];\n", d.id, d.function_name, top_frame.end_time-top_frame.start_time);
-//    fputs(buffer, FunctionTracer::fp);
-
     sprintf(buffer, " p%d -> p%d [label=\"%d\"] \n", d.id, top_frame.id, top_frame.id);
     fputs(buffer, FunctionTracer::fp);
 
@@ -150,7 +126,6 @@ void __cyg_profile_func_exit(void* this_fn, void* call_site)
     }
     stacks[idx].pop();
 
-    //s.pop();
 
 }
 
