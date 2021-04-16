@@ -1,0 +1,6 @@
+
+TODOs
+1. Limit stack depth
+2. Improve performance
+3. Use linked list to track data, not print directly
+4. start stop tracer multiple times
