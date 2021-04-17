@@ -62,4 +62,7 @@ int destroyHashtable() __attribute__ ((no_instrument_function));
 // Get the starting bucket of a collision chain
 // which should be traversed
 Bucket *getBucket(int index) __attribute__((no_instrument_function));
+
+
+int deleteNodesRecursively(Node *node) __attribute__((no_instrument_function));
 }

@@ -6,7 +6,6 @@
 #include <iostream>
 using namespace std;
 using namespace FlightRecorder;
-/*
 TEST(FirstTestSuite, CheckingBasics) {
 
 
@@ -24,6 +23,35 @@ TEST(FirstTestSuite, CheckingBasics) {
   key = 72;
   idx = FlightRecorder::insert(key);
   ASSERT_EQ(idx, key%71);
+
+  FlightRecorder::destroyHashtable();
+}
+
+TEST(FirstTestSuite, DestroyHashtable) {
+
+  FlightRecorder::initializeBuckets();
+  int idx;
+  uint key;
+  key = 1;
+  idx = FlightRecorder::insert(key);
+  ASSERT_EQ(idx, key%71);
+  
+  key = 72;
+  idx = FlightRecorder::insert(key);
+  ASSERT_EQ(idx, key%71);
+
+  key = 142;
+  idx = FlightRecorder::insert(key);
+  ASSERT_EQ(idx, key%71);
+
+
+  key = 21;
+  idx = FlightRecorder::insert(key);
+  ASSERT_EQ(idx, key%71);
+
+  printf("Number of keys stored %d\n", FlightRecorder::getNumKeysStored());
+  FlightRecorder::destroyHashtable();
+
   
 }
 
@@ -60,10 +88,11 @@ TEST(FirstTestSuite, CheckHashFunction) {
     ASSERT_LE(hashval, 70);
   }
 
+  FlightRecorder::destroyHashtable();
 }
 
 
-TEST(FirstTestSuite, CheckHashFunction) {
+TEST(FirstTestSuite, CheckHashFunction2) {
 
   FlightRecorder::initializeBuckets();
 
@@ -79,7 +108,7 @@ TEST(FirstTestSuite, CheckHashFunction) {
   }
 
 }
-*/
+
 TEST(FirstTestSuite, CheckInitialization) {
 
   FlightRecorder::initializeBuckets();
@@ -88,6 +117,7 @@ TEST(FirstTestSuite, CheckInitialization) {
     Bucket *bucket = getBucket(i);
     ASSERT_EQ(bucket->chain, (void*)NULL);
   }
+  FlightRecorder::destroyHashtable();
 
 }
 
@@ -125,6 +155,7 @@ TEST(FirstTestSuite, InsertTwoIdentical) {
   idx2 = FlightRecorder::find(key1);
   ASSERT_EQ(idx1, idx2);
   FlightRecorder::printHashTable();  
+  FlightRecorder::destroyHashtable();
 }
 
 
@@ -142,7 +173,7 @@ TEST(FirstTestSuite, InsertSeveralIdenticalHashes) {
   ASSERT_EQ(idx1, idx2);
   }
 
-  FlightRecorder::printHashTable();  
+  FlightRecorder::destroyHashtable();
 }
 
 TEST(FirstTestSuite, TestRandomHashes) {
@@ -158,5 +189,5 @@ TEST(FirstTestSuite, TestRandomHashes) {
   ASSERT_EQ(idx1, idx2);
   }
 
-  FlightRecorder::printHashTable();  
+  FlightRecorder::destroyHashtable();
 }

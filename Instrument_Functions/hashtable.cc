@@ -126,11 +126,31 @@ int getNumKeysStored() {
 
 int destroyHashtable() {
     pthread_mutex_lock(&hashtable_lock);
+    int total_nodes_deleted = 0;
     // Go on freeing up nodes allocated. Err, how?
+    for (int i=0; i<NUM_THREADS_PRIME; i++) {
+        Node *chain = hashtable[i].chain;
+        // chain is the first node on the list
+        if (chain != NULL ) {
+            int count = deleteNodesRecursively(chain);
+            total_nodes_deleted += count;
+        }
+        hashtable[i].chain = NULL;
+    }
+    printf("Total nodes deleted are %d\n", total_nodes_deleted);
+
     pthread_mutex_unlock(&hashtable_lock);
     return 0;
 }
 
+int deleteNodesRecursively(Node *node) {
+    int count = 0;
+    if (node->next != NULL) {
+        count = deleteNodesRecursively(node->next);
+    }
+    free(node);
+    return count+1;
+}
 
 }
 
