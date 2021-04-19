@@ -9,6 +9,7 @@
 #include <cxxabi.h>
 
 #include "hashtable.h"
+#include "LinkedListOfFrames.h"
 using namespace FlightRecorder;
 #define MAX_THREADS_TO_TRACE 71
 
@@ -50,39 +51,30 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
     void *address = this_fn;
     void *call_site_addr = call_site;
     hrtime start_time = gethrtime();
-    hrtime end_time = start_time;
+    hrtime end_time = 0;
 
-//    printf ("start time %llu\n", start_time);
 
-    //int translation_result = dladdr(this_fn, &info);
-    if (dladdr(this_fn, &info)) {
-//        printf("[%s] ",info.dli_sname ? info.dli_sname : "unknown");
-//        printf("[%s]\n",info.dli_fname ? info.dli_fname : "unknown");
-    }
-    FrameInformation d (threadid, address, call_site_addr, start_time, end_time);
-    if (info.dli_sname) {
-        strcpy(d.function_name, info.dli_sname);
-    }
-    else {
-        strcpy(d.function_name, "unknown name");
-    }
-    if (info.dli_fname) {
-        strcpy(d.library_name, info.dli_fname);
-    }
-    else {
-        strcpy(d.library_name, "unknown lib");
-    }
-    d.id = FunctionTracer::id;
+    //FrameInformation d (threadid, address, call_site_addr, start_time, end_time);
+
+    FrameInformation * d = (FrameInformation*) malloc(sizeof (FrameInformation));
+    d->threadid = threadid;
+    d->address = address;
+    d->call_site = call_site_addr;
+    d->start_time = start_time;
+    d->end_time = end_time;
+    d->id = FunctionTracer::id;
 
     // Find an identifier of Stack on which this frame should be pushed
     int idx = FlightRecorder::find(threadid);
     if (idx == -1 ) {
-        printf("Found that threadid %d does not exist in hashtable when pushing a frame\n", threadid);
+        //printf("Found that threadid %d does not exist in hashtable when pushing a frame\n", threadid);
         idx = FlightRecorder::insert(threadid);
-        printf("Result of insert operation is: Threadid:%d, Index:%d\n", threadid, idx);
+        //printf("Result of insert operation is: Threadid:%d, Index:%d\n", threadid, idx);
     }
-    printf("Pushing with threadid %d\n", threadid);
-    stacks[idx].push(d);
+    //printf("TRACE: Pushing with threadid %d on index %d\n", threadid, idx);
+    //stacks[idx].push(d);
+    d->operation = PUSH;
+    FlightRecorder::appendNodeToTailOfAList(d, idx);
 }
 
 void __cyg_profile_func_exit(void* this_fn, void* call_site)
@@ -91,31 +83,57 @@ void __cyg_profile_func_exit(void* this_fn, void* call_site)
     Dl_info info_current;
     hrtime end_time = gethrtime();
     // Translate addresses of current function
-
+/**
     if (dladdr(this_fn, &info_current)) {
 //        printf("[%s] ",info_current.dli_sname ? info_current.dli_sname : "unknown");
 //        printf("[%s]\n",info_current.dli_fname ? info_current.dli_fname : "unknown");
     }
-
+**/
     
     int threadid = pthread_self();
     int idx = FlightRecorder::find(threadid);
-    FrameInformation &d = stacks[idx].getFrame(stacks[idx].top()-1);
-    FrameInformation &top_frame = stacks[idx].getFrame(stacks[idx].top());
-    top_frame.end_time = end_time;
+    //printf("TRACE: Popping with threadid %d on index %d\n", threadid, idx);
+/**    FrameInformation &d = stacks[idx].getFrame(stacks[idx].top()-1);
+**/
+//    FrameInformation &top_frame = stacks[idx].getFrame(stacks[idx].top());
+//    top_frame.end_time = end_time;
 
 
     // Translate addresses of calling function
-    char buffer[2000];
+/**    char buffer[2000];
     sprintf(buffer, " p%d -> p%d [label=\"%d\"] \n", d.id, top_frame.id, top_frame.id);
     fputs(buffer, FunctionTracer::fp);
+**/
+/**
+    void *top_frame_addr = top_frame.address;
+    Dl_info info_top;
+    char top_function_name[400];
+    char top_library_name[400];
+    // Decode this address
+    if (dladdr(top_frame_addr, &info_top)) {
+        printf("POP: [%s] ",info_top.dli_sname ? info_top.dli_sname : "unknown");
+        printf("POP: [%s]\n",info_top.dli_fname ? info_top.dli_fname : "unknown");
+        if (info_top.dli_sname) {
+            strcpy(top_function_name, info_top.dli_sname);
+        }
+        else {
+            strcpy(top_function_name, "unknown name");
+        }
+        if (info_top.dli_fname) {
+            strcpy(top_library_name, info_top.dli_fname);
+        }
+        else {
+            strcpy(top_library_name, "unknown library");
+        }
 
+    }
+**/
 
     // THIS IS IMPORTANT PRINT LINE
     //sprintf(buffer, " p%d [label= \"{%s | Threadid: %u | Time: %.3f ms| Lib: %s }\" ];\n", top_frame.id, top_frame.function_name, top_frame.threadid, (top_frame.end_time-top_frame.start_time)/(FunctionTracer::clock_speed*1000*1000), top_frame.library_name);
     int status;
     // MODIFIED FOR DEMANGLED NAME
-    sprintf(buffer, " p%d [label= \"{%s | Threadid: %u | Time: %.3f ms| Lib: %s }\" ];\n", top_frame.id, abi::__cxa_demangle(top_frame.function_name, 0, 0, &status), top_frame.threadid, (top_frame.end_time-top_frame.start_time)/(FunctionTracer::clock_speed*1000*1000), top_frame.library_name);
+/**    sprintf(buffer, " p%d [label= \"{%s | Threadid: %u | Time: %.3f ms| Lib: %s }\" ];\n", top_frame.id, abi::__cxa_demangle(top_function_name, 0, 0, &status), top_frame.threadid, (top_frame.end_time-top_frame.start_time)/(FunctionTracer::clock_speed*1000*1000), top_library_name);
     fputs(buffer, FunctionTracer::fp);
 
     idx = FlightRecorder::find(top_frame.threadid);
@@ -124,7 +142,18 @@ void __cyg_profile_func_exit(void* this_fn, void* call_site)
         printf("Found that threadid %d does not exist in hashtable when popping a frame\n", top_frame.threadid);
         exit(0);
     }
-    stacks[idx].pop();
+**/
+    //stacks[idx].pop();
+
+   
+//    FrameInformation fpop(top_frame.threadid, top_frame.address, top_frame.call_site, top_frame.start_time, top_frame.end_time); 
+    FrameInformation *fpop = (FrameInformation*) malloc(sizeof(FrameInformation));
+    fpop->threadid = threadid;
+    fpop->address = this_fn;
+    fpop->call_site = call_site;
+    fpop->end_time = end_time;
+    fpop->operation = POP;
+    FlightRecorder::appendNodeToTailOfAList(fpop, idx);
 
 
 }

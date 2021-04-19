@@ -10,7 +10,7 @@ static Bucket hashtable[NUM_THREADS_PRIME];
 pthread_mutex_t hashtable_lock;
 
 int initializeBuckets() {
-    printf("Initializing buckets \n");
+    //printf("Initializing buckets \n");
     for (int i=0; i<NUM_THREADS_PRIME; i++) {
         hashtable[i].chain = NULL;
     }
@@ -30,13 +30,13 @@ int hash(int key) {
 }
 
 int printHashTable() {
-    printf("Printing hashtable \n");
+    //printf("Printing hashtable \n");
     for (int i=0; i<NUM_THREADS_PRIME; i++) {
         Node *chain = hashtable[i].chain;
         if (chain != NULL ) {
-            printf("Found an non-empty bucket at %d\n", i);
+            //printf("Found an non-empty bucket at %d\n", i);
             while (chain!= NULL) {
-                printf("Key: %u, Value: %u\n", chain->key, chain->hash_value);
+                //printf("Key: %u, Value: %u\n", chain->key, chain->hash_value);
                 chain = chain->next;
             }
         }
@@ -49,18 +49,18 @@ int find(int key) {
     // Find hash key and search in this hash key if this idx exists
 
     int hash_value = FlightRecorder::hash(key);
-    printf("hash value for %d is %u\n", key, hash_value);
+    //printf("hash value for %d is %u\n", key, hash_value);
     Bucket *bucket = &hashtable[hash_value];
     if (bucket->chain == NULL ){
-        printf("find is returning -1 for key=%d, hash_value=%d\n", key, hash_value);
+        //printf("find is returning -1 for key=%d, hash_value=%d\n", key, hash_value);
         return -1;
     }
     else {
         Node *tail= bucket->chain;
-        printf("First node's value is %d\n", tail->key);
+        //printf("First node's value is %d\n", tail->key);
         while (tail != NULL) {
             if (tail->key == key ) {
-                printf("Found the key at %d\n", tail->key);
+                //printf("Found the key at %d\n", tail->key);
                 return hash_value;
             }
             tail = tail->next;

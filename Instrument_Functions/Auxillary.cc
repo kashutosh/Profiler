@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <unistd.h>
 #include "Auxillary.h"
 
 using namespace std;
@@ -10,6 +11,7 @@ vector<string> v;
 void callout4() {
     cout << "Cout called from callout 4" << endl;
     cout << v.size () << endl;
+    sleep(1);
 }
 void callout3() {
     cout << "Cout called from callout " << endl;

@@ -4,9 +4,10 @@ AX=Auxillary
 ST=Stack
 FTR=FunctionTracer
 HST=hashtable
+LSTFR=LinkedListOfFrames
 
-all : $(TR).a $(MN).o $(AX).o $(ST).o $(FTR).o $(HST).o
-	g++ $(MN).o $(TR).a $(AX).o $(ST).o $(FTR).o $(HST).o -ldl -o $(FTR) -rdynamic -lpthread
+all : $(TR).a $(MN).o $(AX).o $(ST).o $(FTR).o $(HST).o $(LSTFR).o
+	g++ $(MN).o $(TR).a $(AX).o $(ST).o $(FTR).o $(HST).o $(LSTFR).o -ldl -o $(FTR) -rdynamic -lpthread
 
 $(TR).a : $(TR).o
 	ar rvs $(TR).a $(TR).o 
@@ -30,5 +31,8 @@ $(FTR).o : $(FTR).cc $(TR).h
 $(HST).o : $(HST).cc $(HST).h
 	g++ -c -g $(HST).cc -rdynamic 
 
+$(LSTFR).o : $(LSTFR).cc $(LSTFR).h
+	g++ -c -g $(LSTFR).cc -rdynamic 
+
 clean :
-	rm $(TR).a $(TR).o $(MN).o out $(AX).o $(AX).a
+	rm *.o *.a $(FTR)

@@ -8,6 +8,10 @@
 #include <pthread.h>
 #include <string.h>
 
+#define PUSH 1
+#define POP 0
+#define UNDEFINED -1
+
 extern int initialization_complete;
 
 
@@ -17,18 +21,18 @@ typedef unsigned long long int hrtime;
 #define MAX_NAME_LEN 400
 #define MAX_LIBNAME_LEN 200
 
+
 // What information is pushed on stack when __cyg function is called?
 
 struct FrameInformation {
-    public:
         int threadid;
         void *address;
         void *call_site; 
         hrtime start_time;
         hrtime end_time;
-        char function_name[MAX_NAME_LEN];
-        char library_name[MAX_LIBNAME_LEN];
         int id;
+        int operation; // 1 = PUSH, 0 = POP
+        FrameInformation *next;
         //create a place for timestamp
         
         FrameInformation(int threadid_ = 0, 
@@ -36,17 +40,15 @@ struct FrameInformation {
                          void* call_site_ = 0, 
                          hrtime start_time_ = 0, 
                          hrtime end_time_ = 0,
-                         const char *function_name_ = "dummyname",
-                         const char *library_name_= "dummyname",
-                         const int id_ = 0 ) __attribute__((no_instrument_function)) { 
+                         const int id_ = 0,
+                         int operation = UNDEFINED ) __attribute__((no_instrument_function)) { 
             this->threadid = threadid_; 
             this->address = address_;
             this->call_site = call_site_;
             this->start_time = start_time_;
             this->end_time = end_time_;
-            strcpy(this->function_name, function_name);
-            strcpy(this->library_name, library_name_);
             this->id = id_;
+            this->operation = operation;
         }
         // One can call only such code that does not perform any 
         //    function calls or standard library calls from over here
@@ -55,7 +57,7 @@ struct FrameInformation {
             // Thankfully pthread functions are not instrumentable
             // Perhaps because they are glibc functions?
             printf("------------------------------------------\n");
-            printf("threadid: %u , address: %p, call_site: %p, start_time: %llu, function_name: %s \n", threadid, address, call_site, start_time, function_name);
+            printf("threadid: %u , address: %p, call_site: %p, start_time: %llu \n", threadid, address, call_site, start_time);
             printf("------------------------------------------\n");
             
         }
