@@ -116,4 +116,29 @@ bool printTheListsOutToAFile() {
     }
 }
 
+int deleteNodesInLinkedListRecursively(FrameInformation *node) {
+    int count = 0;
+    if (node->next != NULL) {
+        count = deleteNodesInLinkedListRecursively(node->next);
+    }
+    free(node);
+    return count+1;
+}
+
+
+void cleanupLinkedLists() {
+    int total_nodes_deleted = 0;
+    for (int i=0; i<NUM_THREADS_PRIME; i++) {
+        FrameInformation *chain = list_of_frames[i].next;
+        // chain is the first node on the list
+        if (chain != NULL ) {
+            int count = deleteNodesInLinkedListRecursively(chain);
+            total_nodes_deleted += count;
+        }
+        chain->next = NULL;
+    }
+    printf("Total nodes deleted are %d\n", total_nodes_deleted);
+    idx = -1;
+    initializeLinkedLists();
+}
 }
