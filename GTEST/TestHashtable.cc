@@ -14,18 +14,19 @@ TEST(FirstTestSuite, CheckingBasics) {
   uint key;
   key = 10;
   idx = FlightRecorder::insert(key);
-  ASSERT_EQ(idx, key%71);
+  ASSERT_EQ(idx, 0);
   
   key = 72;
   idx = FlightRecorder::insert(key);
-  ASSERT_EQ(idx, key%71);
+  ASSERT_EQ(idx, 1);
 
   key = 72;
   idx = FlightRecorder::insert(key);
-  ASSERT_EQ(idx, key%71);
+  ASSERT_EQ(idx, 1);
 
   FlightRecorder::destroyHashtable();
 }
+
 
 TEST(FirstTestSuite, DestroyHashtable) {
 
@@ -34,20 +35,20 @@ TEST(FirstTestSuite, DestroyHashtable) {
   uint key;
   key = 1;
   idx = FlightRecorder::insert(key);
-  ASSERT_EQ(idx, key%71);
+  ASSERT_EQ(idx, 0);
   
   key = 72;
   idx = FlightRecorder::insert(key);
-  ASSERT_EQ(idx, key%71);
+  ASSERT_EQ(idx, 1);
 
   key = 142;
   idx = FlightRecorder::insert(key);
-  ASSERT_EQ(idx, key%71);
+  ASSERT_EQ(idx, 2);
 
 
   key = 21;
   idx = FlightRecorder::insert(key);
-  ASSERT_EQ(idx, key%71);
+  ASSERT_EQ(idx, 3);
 
   printf("Number of keys stored %d\n", FlightRecorder::getNumKeysStored());
   FlightRecorder::destroyHashtable();
@@ -62,16 +63,18 @@ TEST(FirstTestSuite, CheckingBasics2) {
   int idx1, idx2;
   int key1, key2;
   key1 = 1; key2 = 72;
-//  idx1 = FlightRecorder::insert(key1);
-//  idx2 = FlightRecorder::insert(key2);
-//  ASSERT_EQ(idx1, idx2);
+  idx1 = FlightRecorder::insert(key1);
+  idx2 = FlightRecorder::insert(key2);
+  ASSERT_GE(idx1, 0);
+  ASSERT_GE(idx2, 0);
+  ASSERT_NE(idx1, idx2);
 
-//  int findIdx1 = FlightRecorder::find(key1);  
-//  ASSERT_EQ(findIdx1, idx1);
-//  int findIdx2 = FlightRecorder::find(key2);  
-//  ASSERT_EQ(findIdx2, idx2);
+  int findIdx1 = FlightRecorder::find(key1);  
+  ASSERT_EQ(findIdx1, idx1);
+  int findIdx2 = FlightRecorder::find(key2);  
+  ASSERT_EQ(findIdx2, idx2);
+  FlightRecorder::destroyHashtable();
 }
-
 
 TEST(FirstTestSuite, CheckHashFunction) {
 
@@ -91,7 +94,6 @@ TEST(FirstTestSuite, CheckHashFunction) {
   FlightRecorder::destroyHashtable();
 }
 
-
 TEST(FirstTestSuite, CheckHashFunction2) {
 
   FlightRecorder::initializeBuckets();
@@ -108,7 +110,6 @@ TEST(FirstTestSuite, CheckHashFunction2) {
   }
 
 }
-
 TEST(FirstTestSuite, CheckInitialization) {
 
   FlightRecorder::initializeBuckets();
@@ -120,7 +121,6 @@ TEST(FirstTestSuite, CheckInitialization) {
   FlightRecorder::destroyHashtable();
 
 }
-
 TEST(FirstTestSuite, InsertAndRetrieve) {
 
   FlightRecorder::initializeBuckets();
@@ -145,7 +145,7 @@ TEST(FirstTestSuite, InsertTwoIdentical) {
   key1 = 92; 
   idx1 = FlightRecorder::insert(key1);
   idx2 = FlightRecorder::insert(21);
-  ASSERT_EQ(idx1, idx2);
+  ASSERT_NE(idx1, idx2);
 
   idx2 = FlightRecorder::find(key1);
   ASSERT_EQ(idx1, idx2);
@@ -157,7 +157,6 @@ TEST(FirstTestSuite, InsertTwoIdentical) {
   FlightRecorder::printHashTable();  
   FlightRecorder::destroyHashtable();
 }
-
 
 TEST(FirstTestSuite, InsertSeveralIdenticalHashes) {
 

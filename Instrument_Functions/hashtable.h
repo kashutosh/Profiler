@@ -8,6 +8,7 @@ namespace FlightRecorder {
 struct Node{
     int key;
     int hash_value;
+    int idx;
     struct Node *next;
 } ;
 

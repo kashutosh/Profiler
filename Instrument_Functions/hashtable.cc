@@ -61,12 +61,13 @@ int find(int key) {
         while (tail != NULL) {
             if (tail->key == key ) {
                 //printf("Found the key at %d\n", tail->key);
-                return hash_value;
+                // If the key matches, return the index of which stack / LL this should go into
+                return tail->idx;
             }
             tail = tail->next;
         }
    }
-    return -1;
+   return -1;
 
 }
 
@@ -76,12 +77,17 @@ int insert (int key) {
     pthread_mutex_lock(&hashtable_lock);
     // When inserting, always do a find first and iff it returns
     // false, then only insert. Otherwise return
-    
     int found_idx = FlightRecorder::find(key);
     if (found_idx != -1) {
         printf ("Found that the key was already inserted at %u\n", found_idx);
         pthread_mutex_unlock(&hashtable_lock);
         return found_idx;
+    }
+
+
+    if (idx == (NUM_THREADS_PRIME-1) )  {
+        pthread_mutex_unlock(&hashtable_lock);
+        return -1;
     }
     // Search for this key in the hash table
     Bucket *bucket = &hashtable[hash_value];
@@ -90,6 +96,8 @@ int insert (int key) {
         Node *node = (Node *)malloc (sizeof(Node));
         node->key = key;
         node->hash_value = hash_value;
+        idx++;
+        node->idx = idx;
         node->next = NULL;
         bucket->chain = node;
     }
@@ -102,12 +110,14 @@ int insert (int key) {
         Node *node = (Node *)malloc (sizeof(Node));
         node->key = key;
         node->hash_value = hash_value;
+        idx++;
+        node->idx = idx;
         node->next = NULL;
         tail->next = node;
     }
     // On insertion, return which bucket was the key inserted into
     pthread_mutex_unlock(&hashtable_lock);
-    return hash_value;
+    return idx;
     
 }
 int getNumKeysStored() {
@@ -138,6 +148,7 @@ int destroyHashtable() {
         hashtable[i].chain = NULL;
     }
     printf("Total nodes deleted are %d\n", total_nodes_deleted);
+    idx = -1;
 
     pthread_mutex_unlock(&hashtable_lock);
     return 0;
