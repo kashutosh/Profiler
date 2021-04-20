@@ -44,7 +44,6 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
 
     FunctionTracer::id++;
     // Do not do address translations right here?
-    Dl_info info;
 
     int threadid = pthread_self();
     void *address = this_fn;

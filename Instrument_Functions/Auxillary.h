@@ -26,5 +26,7 @@ public:
 
 };
 
+void callout4();
+void benchmark_sleep();
 #endif
 

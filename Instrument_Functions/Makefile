@@ -5,9 +5,10 @@ ST=Stack
 FTR=FunctionTracer
 HST=hashtable
 LSTFR=LinkedListOfFrames
+BM=Benchmark_Overhead
 
-all : $(TR).a $(MN).o $(AX).o $(ST).o $(FTR).o $(HST).o $(LSTFR).o
-	g++ $(MN).o $(TR).a $(AX).o $(ST).o $(FTR).o $(HST).o $(LSTFR).o -ldl -o $(FTR) -rdynamic -lpthread
+all : $(TR).a $(MN).o $(AX).o $(ST).o $(FTR).o $(HST).o $(LSTFR).o $(BM).o
+	g++ $(MN).o $(TR).a $(AX).o $(ST).o $(FTR).o $(HST).o $(LSTFR).o $(BM).o -ldl -o $(FTR) -rdynamic -lpthread
 
 $(TR).a : $(TR).o
 	ar rvs $(TR).a $(TR).o 
@@ -33,6 +34,9 @@ $(HST).o : $(HST).cc $(HST).h
 
 $(LSTFR).o : $(LSTFR).cc $(LSTFR).h
 	g++ -c -g $(LSTFR).cc -rdynamic 
+
+$(BM).o : $(BM).cc 
+	g++ -c -g $(BM).cc -rdynamic 
 
 clean :
 	rm *.o *.a $(FTR)

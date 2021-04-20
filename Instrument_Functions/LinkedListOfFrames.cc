@@ -99,7 +99,7 @@ bool printTheListsOutToAFile() {
                 }
 
                 int status;
-                sprintf(buffer, " p%d [label= \"{%s | Threadid: %u | Time: %.3f ms| Lib: %s }\" ];\n", top_frame.id, abi::__cxa_demangle(top_function_name, 0, 0, &status), top_frame.threadid, (node->end_time-top_frame.start_time)/(FunctionTracer::clock_speed*1000*1000), top_library_name);
+                sprintf(buffer, " p%d [label= \"{%s | Threadid: %u | Time: %.3f ms| Lib: %s }\" ];\n", top_frame.id, abi::__cxa_demangle(top_function_name, 0, 0, &status), top_frame.threadid, (node->end_time-top_frame.start_time)/FunctionTracer::clock_speed/1000/1000, top_library_name);
                 fputs(buffer, FunctionTracer::fp);
                 idx = FlightRecorder::find(top_frame.threadid);
             

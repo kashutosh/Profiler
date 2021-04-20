@@ -68,7 +68,7 @@ void *Downloader(void *arg)
 
 int main() {
     // How would somebody detect that initialization happened here?
-    FunctionTracer::initializeTracer(2.0);
+    FunctionTracer::initializeTracer(2.4);
     // There is practically no difference in calling 
     // callout (from external file) and foo (from same file)
     // here
