@@ -9,8 +9,17 @@ using namespace std;
 extern int global;
 void callout();
 
+void BAZ() {
+    cout << "BAZ " << endl;
+}
+
+void bar() {
+    cout << "bar " << endl;
+    BAZ();
+}
 void foo() {
     cout << "foo " << endl;
+    bar();
 }
 
 class C {
@@ -59,7 +68,7 @@ void *Downloader(void *arg)
         fptr(counter);
         //I do not know which function to call. The caller should have told me about it
         cout << "Counter is " << counter << endl;
-        sleep (0.1);
+        //sleep (0.1);
     }
     pthread_exit(0);
 }
@@ -72,29 +81,29 @@ int main() {
     // There is practically no difference in calling 
     // callout (from external file) and foo (from same file)
     // here
-    callout();
+//    callout();
     foo();
-    C * c = new C();
-    c->printC();
-
-
-
-    pthread_t downloader;
-    int argToThread = 83;
-    int (*fptr) (int) = function91;
-
-    if (pthread_create(&downloader, NULL, Downloader, (void *)fptr)!=0) {
-        cout << "Failed to create Downloader pthread \n";
-        return -1;
-    }
-     
-    if (pthread_join(downloader, NULL)!=0) {
-        cout << "Failed to join the forked thread Downloader \n";
-        return -1;
-    }
-
+//    C * c = new C();
+//    c->printC();
+//
+//
+//
+//    pthread_t downloader;
+//    int argToThread = 83;
+//    int (*fptr) (int) = function91;
+//
+//    if (pthread_create(&downloader, NULL, Downloader, (void *)fptr)!=0) {
+//        cout << "Failed to create Downloader pthread \n";
+//        return -1;
+//    }
+//     
+//    if (pthread_join(downloader, NULL)!=0) {
+//        cout << "Failed to join the forked thread Downloader \n";
+//        return -1;
+//    }
+//
+//    delete c;
     FunctionTracer::stopTracer();
-    delete c;
     return 0;
 }
 

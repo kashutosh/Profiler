@@ -3,11 +3,13 @@
 #include "LinkedListOfFrames.h"
 #include "FunctionTracer.h"
 #include <cxxabi.h>
+#include <string>
 
 namespace FlightRecorder {
 // One must have a bunch of lists, one for each thread!!
 struct FrameInformation list_of_frames[NUM_THREADS_PRIME];
 struct FrameInformation *tails[NUM_THREADS_PRIME];
+
 
 void initializeLinkedLists() {
     for (int i=0; i<NUM_THREADS_PRIME; i++) {
@@ -49,6 +51,7 @@ bool appendNodeToTailOfAList(FrameInformation *node, int index) {
 
 
 Stack sprint;
+
 bool printTheListsOutToAFile() {
     for (int i=0; i<NUM_THREADS_PRIME; i++) {
         // Catch the header node of each list
@@ -58,11 +61,13 @@ bool printTheListsOutToAFile() {
         if (node == NULL) continue;
 //        printf("Printing out - non zero - list number %d\n", i);
 
+        int pushcounter =0, popcounter =0;
         while (node!= NULL) {
             if (node->operation == PUSH) {
                 // One day we will see POP for this
                 // Push this node on Stack!! This is the only way we can compute time spent in this function
 //                printf("LL:Pushing node %d Addr: %p\n", node->id, node->address);
+                pushcounter++;
                 sprint.push(*node);
             }
             else if (node->operation == POP) {
@@ -110,9 +115,11 @@ bool printTheListsOutToAFile() {
                 }
 
                 sprint.pop();
+                popcounter++;
             }
             node = node->next;
         }
+        printf("I did %d PUSH and %d POPs \n", pushcounter, popcounter);
     }
 }
 
@@ -141,4 +148,5 @@ void cleanupLinkedLists() {
     idx = -1;
     initializeLinkedLists();
 }
+
 }

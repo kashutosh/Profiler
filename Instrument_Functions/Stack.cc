@@ -60,7 +60,6 @@ bool Stack::printStackFrames(const char *filename) {
     return true;
 }
 
-
 FrameInformation &Stack::getFrame(int index) {
      if (index <=0 || index > MAX_STACK_DEPTH) {
          return frames[0];

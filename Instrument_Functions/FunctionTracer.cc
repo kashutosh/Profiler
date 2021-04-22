@@ -4,6 +4,7 @@
 #include "hashtable.h"
 #include <cxxabi.h>
 #include "LinkedListOfFrames.h"
+#include "Aggregate_Stacks.h"
 
 using namespace FlightRecorder;
 
@@ -77,12 +78,14 @@ bool FunctionTracer::stopTracer() {
     FrameInformation *fpop = (FrameInformation*) malloc(sizeof(FrameInformation));
     int threadid = pthread_self();
     fpop->threadid = threadid;
-    fpop->address = (void*)&FunctionTracer::stopTracer;
-    fpop->call_site = (void*)FunctionTracer::stopTracer;
+    fpop->address = (void*)&FunctionTracer::initializeTracer;
+    fpop->call_site = (void*)FunctionTracer::initializeTracer;
     fpop->start_time = 0;
     hrtime end_time = gethrtime();
     fpop->end_time = end_time;
     fpop->operation = POP;
+
+    int idx = FlightRecorder::find(threadid);
     FlightRecorder::appendNodeToTailOfAList(fpop, idx);
 
 
@@ -94,6 +97,8 @@ bool FunctionTracer::stopTracer() {
     fputs("}\n", fp);
     fclose(fp);
     FunctionTracer::id=0;
+
+    //FlightRecorder::aggregateStacks();
 
     printf("Number of stacks created were %d\n", FlightRecorder::getNumKeysStored());
     return true;
