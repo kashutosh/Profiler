@@ -98,7 +98,7 @@ bool FunctionTracer::stopTracer() {
     fclose(fp);
     FunctionTracer::id=0;
 
-    //FlightRecorder::aggregateStacks();
+    FlightRecorder::aggregateStacks();
 
     printf("Number of stacks created were %d\n", FlightRecorder::getNumKeysStored());
     return true;

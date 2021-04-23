@@ -28,7 +28,7 @@ struct Bucket{
 
 typedef struct Node Node;
 typedef struct Bucket Bucket;
-static int idx = -1;
+static int hashtable_idx = -1;
 
 /** 
 * All functions below are declared no_instrument_function 

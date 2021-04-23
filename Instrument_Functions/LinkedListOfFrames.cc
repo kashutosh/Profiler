@@ -53,6 +53,7 @@ bool appendNodeToTailOfAList(FrameInformation *node, int index) {
 Stack sprint;
 
 bool printTheListsOutToAFile() {
+    int idx;
     for (int i=0; i<NUM_THREADS_PRIME; i++) {
         // Catch the header node of each list
         FrameInformation *fptr = &list_of_frames[i];
@@ -145,7 +146,7 @@ void cleanupLinkedLists() {
         chain->next = NULL;
     }
     printf("Total nodes deleted are %d\n", total_nodes_deleted);
-    idx = -1;
+    hashtable_idx = -1;
     initializeLinkedLists();
 }
 

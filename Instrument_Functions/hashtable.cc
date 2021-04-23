@@ -46,7 +46,7 @@ int printHashTable() {
 
 int find(int key) {
 
-    // Find hash key and search in this hash key if this idx exists
+    // Find hash key and search in this hash key if this hashtable_idx exists
 
     int hash_value = FlightRecorder::hash(key);
     //printf("hash value for %d is %u\n", key, hash_value);
@@ -85,7 +85,7 @@ int insert (int key) {
     }
 
 
-    if (idx == (NUM_THREADS_PRIME-1) )  {
+    if (hashtable_idx == (NUM_THREADS_PRIME-1) )  {
         pthread_mutex_unlock(&hashtable_lock);
         return -1;
     }
@@ -96,8 +96,8 @@ int insert (int key) {
         Node *node = (Node *)malloc (sizeof(Node));
         node->key = key;
         node->hash_value = hash_value;
-        idx++;
-        node->idx = idx;
+        hashtable_idx++;
+        node->idx = hashtable_idx;
         node->next = NULL;
         bucket->chain = node;
     }
@@ -110,14 +110,14 @@ int insert (int key) {
         Node *node = (Node *)malloc (sizeof(Node));
         node->key = key;
         node->hash_value = hash_value;
-        idx++;
-        node->idx = idx;
+        hashtable_idx++;
+        node->idx = hashtable_idx;
         node->next = NULL;
         tail->next = node;
     }
     // On insertion, return which bucket was the key inserted into
     pthread_mutex_unlock(&hashtable_lock);
-    return idx;
+    return hashtable_idx;
     
 }
 int getNumKeysStored() {
@@ -148,7 +148,7 @@ int destroyHashtable() {
         hashtable[i].chain = NULL;
     }
     printf("Total nodes deleted are %d\n", total_nodes_deleted);
-    idx = -1;
+    hashtable_idx = -1;
 
     pthread_mutex_unlock(&hashtable_lock);
     return 0;
