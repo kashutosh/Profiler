@@ -73,9 +73,9 @@ bool getSignature(int threadindex, FrameInformation *node, std::string &signatur
     std::string functioname = getFunctionName(node->address);
     int index = 0;
 
-    for (int i=0;i<=4;i++) {
-        printf("Stack Frame %d is %p\n", i, saggr.getFrame(i).address);
-    }
+//    for (int i=0;i<=4;i++) {
+//        printf("Stack Frame %d is %p\n", i, saggr.getFrame(i).address);
+//    }
 
     FrameInformation current_node = saggr.getFrame(0);
     char current_node_sign[34];
@@ -255,6 +255,13 @@ bool aggregateStacks() {
 
                 FrameInformation &d= saggr.getFrame(saggr.top()-1);
                 FrameInformation &top_frame = saggr.getFrame(saggr.top());
+
+/*
+                // This should never happen
+                if (top_frame.threadid != d.threadid) {
+                    printf("********FOUND THREAD JUMP******************\n");
+                }
+*/
                 // We have discovered an edge from d to top_frame. Put this edge in edge_nodes
                 bool edge_accounted = accountEdge(d.address, top_frame.address);
                 // assert that edge_accounted is true

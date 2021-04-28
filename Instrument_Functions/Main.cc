@@ -19,6 +19,7 @@ void bar() {
     BAZ();
     BAZ();
 }
+
 void foo() {
     cout << "foo " << endl;
     bar();
@@ -81,7 +82,7 @@ void *Downloader(void *arg)
 
 int main() {
     // How would somebody detect that initialization happened here?
-    FunctionTracer::initializeTracer(2.4);
+    FunctionTracer::initializeTracer(2.4, (void*)&main);
     // There is practically no difference in calling 
     // callout (from external file) and foo (from same file)
     // here
@@ -107,7 +108,7 @@ int main() {
     }
 
     delete c;
-    FunctionTracer::stopTracer();
+    FunctionTracer::stopTracer((void*)&main);
     return 0;
 }
 

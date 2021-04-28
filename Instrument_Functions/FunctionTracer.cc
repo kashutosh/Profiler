@@ -16,7 +16,7 @@ float FunctionTracer::clock_speed = 2.0;
 extern Stack stacks[NUM_THREADS_PRIME];
 int initialization_complete = 0;
 
-bool FunctionTracer::initializeTracer(float clock_speed_) {
+bool FunctionTracer::initializeTracer(float clock_speed_, void *caller_ptr) {
     extern Stack s;
     extern int initialization_complete;
 
@@ -43,8 +43,12 @@ bool FunctionTracer::initializeTracer(float clock_speed_) {
     f->threadid = threadid;
 
     // NOTICE THIS LINE CAREFULLY
-    f->address = (void*)&FunctionTracer::initializeTracer;
-    f->call_site = (void*)FunctionTracer::initializeTracer;
+    //f->address = (void*)&FunctionTracer::initializeTracer;
+    //f->call_site = (void*)FunctionTracer::initializeTracer;
+
+    f->address = caller_ptr;
+    f->call_site = caller_ptr;
+
     hrtime start_time = gethrtime();
     f->start_time = start_time;
     f->end_time = start_time;
@@ -60,6 +64,7 @@ bool FunctionTracer::initializeTracer(float clock_speed_) {
     }
 
     printf("FNTR: Pushing with threadid %d on index %d\n", threadid, idx);
+
     FlightRecorder::appendNodeToTailOfAList(f, idx);
 
     initialization_complete = 1;
@@ -69,7 +74,7 @@ bool FunctionTracer::initializeTracer(float clock_speed_) {
 
 
 
-bool FunctionTracer::stopTracer() {
+bool FunctionTracer::stopTracer(void *caller_ptr) {
     if (fp == NULL) {
         return false;
     }
@@ -78,8 +83,11 @@ bool FunctionTracer::stopTracer() {
     FrameInformation *fpop = (FrameInformation*) malloc(sizeof(FrameInformation));
     int threadid = pthread_self();
     fpop->threadid = threadid;
-    fpop->address = (void*)&FunctionTracer::initializeTracer;
-    fpop->call_site = (void*)FunctionTracer::initializeTracer;
+    //fpop->address = (void*)&FunctionTracer::initializeTracer;
+    //fpop->call_site = (void*)FunctionTracer::initializeTracer;
+
+    fpop->address = caller_ptr;
+    fpop->call_site = caller_ptr;
     fpop->start_time = 0;
     hrtime end_time = gethrtime();
     fpop->end_time = end_time;
