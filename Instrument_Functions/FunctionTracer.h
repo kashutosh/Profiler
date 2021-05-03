@@ -9,6 +9,7 @@ private:
     FunctionTracer &operator = (FunctionTracer &);
 public:
     static FILE *fp;
+    static FILE *fptext;
 
     // Only two functions should be visible from outside
     static bool initializeTracer(float clock_speed_=2.0, void *caller_ptr=0);
@@ -17,6 +18,7 @@ public:
 
     static int id[71];
     static float clock_speed;
+    static hrtime execution_start_time;
 };
 
 #endif

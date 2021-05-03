@@ -11,10 +11,12 @@ using namespace FlightRecorder;
 hrtime gethrtime(void);
 
 FILE * FunctionTracer::fp;
+FILE * FunctionTracer::fptext;
 int FunctionTracer::id [NUM_THREADS_PRIME] = {0};
 float FunctionTracer::clock_speed = 2.0;
 extern Stack stacks[NUM_THREADS_PRIME];
 int initialization_complete = 0;
+hrtime FunctionTracer::execution_start_time = 0;
 
 bool FunctionTracer::initializeTracer(float clock_speed_, void *caller_ptr) {
     extern Stack s;
@@ -33,6 +35,14 @@ bool FunctionTracer::initializeTracer(float clock_speed_, void *caller_ptr) {
         printf("Unable to open the file to be written \n");
         return false;    
     }
+
+    fptext = fopen ("/tmp/callstack.txt", "w");
+
+    if (fptext == NULL) {
+        printf("Unable to open the file to be written \n");
+        return false;    
+    }
+
 
     fputs("digraph { \n", fp);
     fputs("node [ shape=record ];\n", fp);
@@ -66,6 +76,8 @@ bool FunctionTracer::initializeTracer(float clock_speed_, void *caller_ptr) {
     printf("FNTR: Pushing with threadid %d on index %d\n", threadid, idx);
 
     FlightRecorder::appendNodeToTailOfAList(f, idx);
+
+    execution_start_time = start_time;
 
     initialization_complete = 1;
     return true;
@@ -104,6 +116,7 @@ bool FunctionTracer::stopTracer(void *caller_ptr) {
 
     fputs("}\n", fp);
     fclose(fp);
+    fclose(fptext);
     for (int i=0; i<NUM_THREADS_PRIME; i++) {
         FunctionTracer::id[i]=0;
     }

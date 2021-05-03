@@ -5,6 +5,7 @@
 
 using namespace FlightRecorder;
 
+
 Stack::Stack() {
     //printf ("Creating stack \n");
     index = -1;

@@ -49,11 +49,17 @@ bool appendNodeToTailOfAList(FrameInformation *node, int index) {
 }
 
 
+float getTimeInMSFromTraceBeginning(hrtime current_time) {
+    return (current_time - FunctionTracer::execution_start_time) / (FunctionTracer::clock_speed*1000*1000);
+}
 
 Stack sprint;
 
 bool printTheListsOutToAFile() {
     int idx;
+    char buffer[2000];
+    char buffertext[2000];
+    int tablevel = 0;
     for (int i=0; i<NUM_THREADS_PRIME; i++) {
         // Catch the header node of each list
         FrameInformation *fptr = &list_of_frames[i];
@@ -70,17 +76,49 @@ bool printTheListsOutToAFile() {
 //                printf("LL:Pushing node %d Addr: %p\n", node->id, node->address);
                 pushcounter++;
                 sprint.push(*node);
+                tablevel++;
+
+                for (int t=0; t<tablevel; t++) {
+                    sprintf(buffertext+(t*4), "----");
+                }
+
+                fputs(buffertext, FunctionTracer::fptext);
+
+                Dl_info info_top;
+                char top_function_name[400];
+                char top_library_name[400];
+                // Decode this address
+                if (dladdr(node->address, &info_top)) {
+//                    printf("POP: [%s] ",info_top.dli_sname ? info_top.dli_sname : "unknown");
+//                    printf("POP: [%s]\n",info_top.dli_fname ? info_top.dli_fname : "unknown");
+                    if (info_top.dli_sname) {
+                        strcpy(top_function_name, info_top.dli_sname);
+                    }
+                    else {
+                        strcpy(top_function_name, "unknown name");
+                    }
+                    if (info_top.dli_fname) {
+                        strcpy(top_library_name, info_top.dli_fname);
+                    }
+                    else {
+                        strcpy(top_library_name, "unknown library");
+                    }
+            
+                }
+                int status;
+                sprintf(buffertext, "TS: %.3f ms, Thread: %d, CallID: %u, %s\n", getTimeInMSFromTraceBeginning
+(node->start_time), node->threadid, node->id, abi::__cxa_demangle(top_function_name, 0, 0, &status));
+                fputs(buffertext, FunctionTracer::fptext);
             }
             else if (node->operation == POP) {
 //                printf("LL:Popping node %d Addr: %p\n", node->id, node->address);
                 FrameInformation &d= sprint.getFrame(sprint.top()-1);
                 FrameInformation &top_frame = sprint.getFrame(sprint.top());
 
-                
-
-                char buffer[2000];
                 sprintf(buffer, " p%d -> p%d [label=\"%d\"] \n", d.id, top_frame.id, top_frame.id);
                 fputs(buffer, FunctionTracer::fp);
+
+                
                 void *top_frame_addr = top_frame.address;
                 Dl_info info_top;
                 char top_function_name[400];
@@ -107,6 +145,8 @@ bool printTheListsOutToAFile() {
                 int status;
                 sprintf(buffer, " p%d [label= \"{%s | Threadid: %u | Time: %.3f ms| Lib: %s }\" ];\n", top_frame.id, abi::__cxa_demangle(top_function_name, 0, 0, &status), top_frame.threadid, (node->end_time-top_frame.start_time)/FunctionTracer::clock_speed/1000/1000, top_library_name);
                 fputs(buffer, FunctionTracer::fp);
+
+
                 idx = FlightRecorder::find(top_frame.threadid);
             
                 if (idx == -1 ) {
@@ -117,12 +157,16 @@ bool printTheListsOutToAFile() {
 
                 sprint.pop();
                 popcounter++;
+                tablevel--;
             }
             node = node->next;
         }
         printf("I did %d PUSH and %d POPs \n", pushcounter, popcounter);
     }
 }
+
+
+
 
 int deleteNodesInLinkedListRecursively(FrameInformation *node) {
     int count = 0;
