@@ -46,13 +46,13 @@ void benchmark() {
         d->call_site = call_site_addr;
         d->start_time = start_time;
         d->end_time = end_time;
-        d->id = FunctionTracer::id;
 
         // Find an identifier of Stack on which this frame should be pushed
         int idx = FlightRecorder::find(threadid);
         if (idx == -1 ) {
             idx = FlightRecorder::insert(threadid);
         }
+        d->id = FunctionTracer::id[idx]++;
         d->operation = PUSH;
         FlightRecorder::appendNodeToTailOfAList(d, idx);
 

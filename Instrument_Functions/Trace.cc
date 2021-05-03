@@ -42,10 +42,18 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
 {
     if (!initialization_complete) return;
 
-    FunctionTracer::id++;
+    int threadid = pthread_self();
+    // Find an identifier of Stack on which this frame should be pushed
+    int idx = FlightRecorder::find(threadid);
+    if (idx == -1 ) {
+        //printf("Found that threadid %d does not exist in hashtable when pushing a frame\n", threadid);
+        idx = FlightRecorder::insert(threadid);
+        //printf("Result of insert operation is: Threadid:%d, Index:%d\n", threadid, idx);
+    }
+
+    FunctionTracer::id[idx]++;
     // Do not do address translations right here?
 
-    int threadid = pthread_self();
     void *address = this_fn;
     void *call_site_addr = call_site;
     hrtime start_time = gethrtime();
@@ -58,15 +66,8 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
     d->call_site = call_site_addr;
     d->start_time = start_time;
     d->end_time = end_time;
-    d->id = FunctionTracer::id;
+    d->id = FunctionTracer::id[idx];
 
-    // Find an identifier of Stack on which this frame should be pushed
-    int idx = FlightRecorder::find(threadid);
-    if (idx == -1 ) {
-        //printf("Found that threadid %d does not exist in hashtable when pushing a frame\n", threadid);
-        idx = FlightRecorder::insert(threadid);
-        //printf("Result of insert operation is: Threadid:%d, Index:%d\n", threadid, idx);
-    }
     d->operation = PUSH;
     FlightRecorder::appendNodeToTailOfAList(d, idx);
 }

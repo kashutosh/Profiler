@@ -15,7 +15,7 @@ public:
     static bool stopTracer(void *caller_ptr);
 
 
-    static int id;
+    static int id[71];
     static float clock_speed;
 };
 
