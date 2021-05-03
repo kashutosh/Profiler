@@ -64,7 +64,6 @@ struct FrameInformation {
 };
 
 
-// MAX_STACK_DEPTH is defined to be 200
 // In real life, most code will not have this much of a deep stack
 
 #define MAX_STACK_DEPTH 200

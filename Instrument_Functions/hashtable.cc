@@ -4,21 +4,21 @@ namespace FlightRecorder {
 //Notice that this is a global hashtable,
 // limited by its namespace only. Requires C++
 
-static Bucket hashtable[NUM_THREADS_PRIME];
+static Bucket hashtable[NUM_BUCKETS_PRIME];
 // This lock is to be used only when modifying the hashtable
 // which is very rare anyway
 pthread_mutex_t hashtable_lock;
 
 int initializeBuckets() {
     //printf("Initializing buckets \n");
-    for (int i=0; i<NUM_THREADS_PRIME; i++) {
+    for (int i=0; i<NUM_BUCKETS_PRIME; i++) {
         hashtable[i].chain = NULL;
     }
     return 0;
 }
 
 Bucket *getBucket(int index) {
-    if (index > NUM_THREADS_PRIME || index <0) return NULL;
+    if (index > NUM_BUCKETS_PRIME || index <0) return NULL;
     return &hashtable[index];
 }
 
@@ -26,12 +26,12 @@ Bucket *getBucket(int index) {
 // earlier, uints were used but they are quite 
 // tricky to handle
 int hash(int key) {
-    return abs(key%NUM_THREADS_PRIME);
+    return abs(key%NUM_BUCKETS_PRIME);
 }
 
 int printHashTable() {
     //printf("Printing hashtable \n");
-    for (int i=0; i<NUM_THREADS_PRIME; i++) {
+    for (int i=0; i<NUM_BUCKETS_PRIME; i++) {
         Node *chain = hashtable[i].chain;
         if (chain != NULL ) {
             //printf("Found an non-empty bucket at %d\n", i);
@@ -85,7 +85,7 @@ int insert (int key) {
     }
 
 
-    if (hashtable_idx == (NUM_THREADS_PRIME-1) )  {
+    if (hashtable_idx == (NUM_BUCKETS_PRIME-1) )  {
         pthread_mutex_unlock(&hashtable_lock);
         return -1;
     }
@@ -122,7 +122,7 @@ int insert (int key) {
 }
 int getNumKeysStored() {
     int counter = 0;
-    for (int i=0; i<NUM_THREADS_PRIME; i++) {
+    for (int i=0; i<NUM_BUCKETS_PRIME; i++) {
         Node *chain = hashtable[i].chain;
         if (chain != NULL ) {
             while (chain!= NULL) {
@@ -138,7 +138,7 @@ int destroyHashtable() {
     pthread_mutex_lock(&hashtable_lock);
     int total_nodes_deleted = 0;
     // Go on freeing up nodes allocated. Err, how?
-    for (int i=0; i<NUM_THREADS_PRIME; i++) {
+    for (int i=0; i<NUM_BUCKETS_PRIME; i++) {
         Node *chain = hashtable[i].chain;
         // chain is the first node on the list
         if (chain != NULL ) {

@@ -11,7 +11,6 @@
 #include "hashtable.h"
 #include "LinkedListOfFrames.h"
 using namespace FlightRecorder;
-#define MAX_THREADS_TO_TRACE 71
 
 #ifdef __cplusplus
 using namespace std;
@@ -36,7 +35,7 @@ extern "C"
 
 
 
-Stack stacks[MAX_THREADS_TO_TRACE];
+Stack stacks[NUM_BUCKETS_PRIME];
 // When we enter the function, this block of code executes
 void __cyg_profile_func_enter(void* this_fn, void* call_site)
 {

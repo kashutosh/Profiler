@@ -12,9 +12,9 @@ hrtime gethrtime(void);
 
 FILE * FunctionTracer::fp;
 FILE * FunctionTracer::fptext;
-int FunctionTracer::id [NUM_THREADS_PRIME] = {0};
+int FunctionTracer::id [NUM_BUCKETS_PRIME] = {0};
 float FunctionTracer::clock_speed = 2.0;
-extern Stack stacks[NUM_THREADS_PRIME];
+extern Stack stacks[NUM_BUCKETS_PRIME];
 int initialization_complete = 0;
 hrtime FunctionTracer::execution_start_time = 0;
 
@@ -117,7 +117,7 @@ bool FunctionTracer::stopTracer(void *caller_ptr) {
     fputs("}\n", fp);
     fclose(fp);
     fclose(fptext);
-    for (int i=0; i<NUM_THREADS_PRIME; i++) {
+    for (int i=0; i<NUM_BUCKETS_PRIME; i++) {
         FunctionTracer::id[i]=0;
     }
 

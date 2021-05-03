@@ -7,15 +7,15 @@
 
 namespace FlightRecorder {
 // One must have a bunch of lists, one for each thread!!
-struct FrameInformation list_of_frames[NUM_THREADS_PRIME];
-struct FrameInformation *tails[NUM_THREADS_PRIME];
+struct FrameInformation list_of_frames[NUM_BUCKETS_PRIME];
+struct FrameInformation *tails[NUM_BUCKETS_PRIME];
 
 
 void initializeLinkedLists() {
-    for (int i=0; i<NUM_THREADS_PRIME; i++) {
+    for (int i=0; i<NUM_BUCKETS_PRIME; i++) {
         list_of_frames[i].next = NULL;
     }
-    for (int i=0; i<NUM_THREADS_PRIME; i++) {
+    for (int i=0; i<NUM_BUCKETS_PRIME; i++) {
         //Initially, this points to header node only 
         // Tail should be initialized to where the last node is, which 
         // for initialization is header node
@@ -24,12 +24,12 @@ void initializeLinkedLists() {
 }
 
 FrameInformation *getFrame(int index) {
-    if (index<0 || index>= NUM_THREADS_PRIME) return NULL;
+    if (index<0 || index>= NUM_BUCKETS_PRIME) return NULL;
     return &list_of_frames[index];
 }
 
 FrameInformation *getTail(int index) {
-    if (index<0 || index>= NUM_THREADS_PRIME) return NULL;
+    if (index<0 || index>= NUM_BUCKETS_PRIME) return NULL;
     return tails[index];
 }
 
@@ -60,7 +60,7 @@ bool printTheListsOutToAFile() {
     char buffer[2000];
     char buffertext[2000];
     int tablevel = 0;
-    for (int i=0; i<NUM_THREADS_PRIME; i++) {
+    for (int i=0; i<NUM_BUCKETS_PRIME; i++) {
         // Catch the header node of each list
         FrameInformation *fptr = &list_of_frames[i];
         // There is no information in the header node itself. Start traversing the list
@@ -180,7 +180,7 @@ int deleteNodesInLinkedListRecursively(FrameInformation *node) {
 
 void cleanupLinkedLists() {
     int total_nodes_deleted = 0;
-    for (int i=0; i<NUM_THREADS_PRIME; i++) {
+    for (int i=0; i<NUM_BUCKETS_PRIME; i++) {
         FrameInformation *chain = list_of_frames[i].next;
         // chain is the first node on the list
         if (chain != NULL ) {

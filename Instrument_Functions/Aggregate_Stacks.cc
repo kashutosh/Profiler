@@ -176,7 +176,7 @@ bool printOutTheDAG() {
 
 bool aggregateStacks() {
     int state, prev_state;
-    for (int i=0; i<NUM_THREADS_PRIME; i++) {
+    for (int i=0; i<NUM_BUCKETS_PRIME; i++) {
         // Catch the header node of each list
         FrameInformation *fptr = &list_of_frames[i];
         FrameInformation *node = fptr->next;

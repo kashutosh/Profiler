@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-#define NUM_THREADS_PRIME 71
+#define NUM_BUCKETS_PRIME 71
 
 namespace FlightRecorder {
 struct Node{
@@ -13,7 +13,7 @@ struct Node{
 } ;
 
 /**
-* An array os such NUM_THREADS_PRIME buckets represents the hashtable. 
+* An array os such NUM_BUCKETS_PRIME buckets represents the hashtable. 
 *  The Bucket node never stores any data
 *
 *  Bucket -> next (Node) -> next (Node) -> NULL
@@ -38,7 +38,7 @@ static int hashtable_idx = -1;
 int initializeBuckets() __attribute__((no_instrument_function));
 
 // Simple hash function that yields a number
-// between 0 to NUM_THREADS_PRIME-1
+// between 0 to NUM_BUCKETS_PRIME-1
 int hash(int key) __attribute__((no_instrument_function));
 
 int printHashTable() __attribute__((no_instrument_function));
@@ -53,7 +53,7 @@ int find(int key) __attribute__((no_instrument_function));
 int insert (int key) __attribute__((no_instrument_function));
 
 // How many keys are stored in hashtable. Could be infinity
-// number of keys in NUM_THREADS_PRIME buckets
+// number of keys in NUM_BUCKETS_PRIME buckets
 // along collision chains
 int getNumKeysStored() __attribute__ ((no_instrument_function));
 
