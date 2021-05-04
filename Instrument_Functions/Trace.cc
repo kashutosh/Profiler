@@ -15,6 +15,8 @@ using namespace FlightRecorder;
 #ifdef __cplusplus
 using namespace std;
 
+extern Hashtable h;
+
 hrtime gethrtime (void) __attribute__((no_instrument_function));
 __inline__ hrtime gethrtime (void) 
 {
@@ -43,10 +45,10 @@ void __cyg_profile_func_enter(void* this_fn, void* call_site)
 
     int threadid = pthread_self();
     // Find an identifier of Stack on which this frame should be pushed
-    int idx = FlightRecorder::find(threadid);
+    int idx = h.find(threadid);
     if (idx == -1 ) {
         //printf("Found that threadid %d does not exist in hashtable when pushing a frame\n", threadid);
-        idx = FlightRecorder::insert(threadid);
+        idx = h.insert(threadid);
         //printf("Result of insert operation is: Threadid:%d, Index:%d\n", threadid, idx);
     }
 
@@ -78,7 +80,7 @@ void __cyg_profile_func_exit(void* this_fn, void* call_site)
     hrtime end_time = gethrtime();
     
     int threadid = pthread_self();
-    int idx = FlightRecorder::find(threadid);
+    int idx = h.find(threadid);
     //printf("TRACE: Popping with threadid %d on index %d\n", threadid, idx);
    
     FrameInformation *fpop = (FrameInformation*) malloc(sizeof(FrameInformation));
@@ -121,3 +123,4 @@ node [ shape=record ];
  p0 [label= "{main |Time: 9223332167680.000 ms}" ];
 }
 */
+

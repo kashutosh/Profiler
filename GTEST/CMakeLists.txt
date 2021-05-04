@@ -26,8 +26,11 @@ add_executable(  testscopeprofiler  TestScopeProfiler.cc ../scope.cc ../ObjectSt
 add_executable(  testobjectstorage TestObjectStorage.cc ../ObjectStorage.cc ../Object.cc)
 add_executable(  testkeyvaluestore TestKeyValueStore.cc ../KeyValueStore.cc)
 add_executable(  testhashtable TestHashtable.cc ../Instrument_Functions/hashtable.cc)
-add_executable(  testlinkedlists TestLinkedListOfFrames.cc ../Instrument_Functions/LinkedListOfFrames.cc ../Instrument_Functions/Stack.cc ../Instrument_Functions/FunctionTracer.cc ../Instrument_Functions/hashtable.cc ../Instrument_Functions/Trace.cc)
-add_executable(  testbenchmark TestBenchmark.cc ../Instrument_Functions/LinkedListOfFrames.cc ../Instrument_Functions/Stack.cc ../Instrument_Functions/FunctionTracer.cc ../Instrument_Functions/hashtable.cc ../Instrument_Functions/Trace.cc ../Instrument_Functions/Benchmark_Overhead.cc)
+add_executable(  testlinkedlists TestLinkedListOfFrames.cc ../Instrument_Functions/LinkedListOfFrames.cc ../Instrument_Functions/Stack.cc ../Instrument_Functions/FunctionTracer.cc ../Instrument_Functions/hashtable.cc ../Instrument_Functions/Trace.cc ../Instrument_Functions/Aggregate_Stacks.cc)
+add_executable(  testbenchmark TestBenchmark.cc ../Instrument_Functions/LinkedListOfFrames.cc ../Instrument_Functions/Stack.cc ../Instrument_Functions/FunctionTracer.cc ../Instrument_Functions/hashtable.cc ../Instrument_Functions/Trace.cc ../Instrument_Functions/Benchmark_Overhead.cc ../Instrument_Functions/Aggregate_Stacks.cc)
+#add_executable(  testaggregator TestAggregator.cc ../Instrument_Functions/Aggregate_Stacks.cc)
+
+
 target_link_libraries(hello gtest_main)
 target_link_libraries(teststack gtest_main)
 target_link_libraries(testscopeprofiler gtest_main)
@@ -36,6 +39,7 @@ target_link_libraries(testkeyvaluestore gtest_main)
 target_link_libraries(testhashtable gtest_main)
 target_link_libraries(testlinkedlists gtest_main dl )
 target_link_libraries(testbenchmark gtest_main dl)
+#target_link_libraries(testaggregator gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(hello)

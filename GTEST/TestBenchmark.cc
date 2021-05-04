@@ -7,7 +7,13 @@
 #include <iostream>
 using namespace std;
 using namespace FlightRecorder;
+
+TEST(FirstTestSuite, VoidStarSize) {
+  cout << sizeof(void*) << endl;
+  cout << sizeof(long long) << endl;
+}
+
 TEST(FirstTestSuite, CheckingBasics) {
-  benchmark();
+  //benchmark();
 }
 

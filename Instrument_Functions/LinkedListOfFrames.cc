@@ -5,10 +5,12 @@
 #include <cxxabi.h>
 #include <string>
 
+extern FlightRecorder::Hashtable h;
 namespace FlightRecorder {
 // One must have a bunch of lists, one for each thread!!
 struct FrameInformation list_of_frames[NUM_BUCKETS_PRIME];
 struct FrameInformation *tails[NUM_BUCKETS_PRIME];
+
 
 
 void initializeLinkedLists() {
@@ -147,7 +149,7 @@ bool printTheListsOutToAFile() {
                 fputs(buffer, FunctionTracer::fp);
 
 
-                idx = FlightRecorder::find(top_frame.threadid);
+                idx = ::h.find(top_frame.threadid);
             
                 if (idx == -1 ) {
                     printf("Found that threadid %d does not exist in hashtable when popping a frame\n", top_frame.threadid);
@@ -190,7 +192,7 @@ void cleanupLinkedLists() {
         chain->next = NULL;
     }
     printf("Total nodes deleted are %d\n", total_nodes_deleted);
-    hashtable_idx = -1;
+    //hashtable_idx = -1;
     initializeLinkedLists();
 }
 

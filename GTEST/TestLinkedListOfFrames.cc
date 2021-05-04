@@ -12,7 +12,7 @@ using namespace FlightRecorder;
 TEST(FirstTestSuite, CheckingInitialization) {
 
   FlightRecorder::initializeLinkedLists();
-  for (int i=0; i<NUM_THREADS_PRIME; i++) {
+  for (int i=0; i<NUM_BUCKETS_PRIME; i++) {
     FrameInformation * f = FlightRecorder::getFrame(i);
     ASSERT_EQ(f->next, (void*) NULL);
   }
@@ -23,7 +23,7 @@ TEST(FirstTestSuite, CheckingInitialization) {
 TEST(FirstTestSuite, CheckingInitialization2) {
 
   FlightRecorder::initializeLinkedLists();
-  for (int i=0; i<NUM_THREADS_PRIME; i++) {
+  for (int i=0; i<NUM_BUCKETS_PRIME; i++) {
     FrameInformation * f = FlightRecorder::getFrame(i);
     FrameInformation * f_tail = FlightRecorder::getTail(i);
     ASSERT_EQ(f, f_tail);
@@ -39,7 +39,7 @@ TEST(FirstTestSuite, CheckAppendNodeToTail) {
   int counter = 99;
 
   for (int i=0;i<100; i++) {
-    int index = rand()%NUM_THREADS_PRIME;
+    int index = rand()%NUM_BUCKETS_PRIME;
     FrameInformation f;
     f.id = counter++;
     bool result = FlightRecorder::appendNodeToTailOfAList(&f, index);
@@ -62,7 +62,7 @@ TEST(FirstTestSuite, CheckAppendNodeToTail2) {
   int counter = 99;
 
   FunctionTracer::initializeTracer();
-  int index = counter%NUM_THREADS_PRIME;
+  int index = counter%NUM_BUCKETS_PRIME;
   FrameInformation f;
   f.id = counter;
   f.operation = PUSH;
@@ -113,7 +113,7 @@ TEST(FirstTestSuite, CheckAppendNodeToTail2) {
   }
 
 
-  FunctionTracer::stopTracer();
+  FunctionTracer::stopTracer(nullptr);
 
 }
 

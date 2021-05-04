@@ -27,8 +27,9 @@ void dummy_function(void * a1, void *a2)  {
 // that looks similar
 
 void benchmark() {
+    Hashtable h;
 
-    FlightRecorder::initializeBuckets();
+    h.initializeBuckets();
     FlightRecorder::initializeLinkedLists();
     hrtime bm_start_time = gethrtime();
     for (int i=0;i<ITERATIONS;i++) {
@@ -48,9 +49,9 @@ void benchmark() {
         d->end_time = end_time;
 
         // Find an identifier of Stack on which this frame should be pushed
-        int idx = FlightRecorder::find(threadid);
+        int idx = h.find(threadid);
         if (idx == -1 ) {
-            idx = FlightRecorder::insert(threadid);
+            idx = h.insert(threadid);
         }
         d->id = FunctionTracer::id[idx]++;
         d->operation = PUSH;

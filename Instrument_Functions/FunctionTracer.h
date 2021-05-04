@@ -1,6 +1,7 @@
 #ifndef FUNCTIONTRACER_H
 #define FUNCTIONTRACER_H
 
+namespace FlightRecorder {
 class FunctionTracer {
 private:
     // Hide constructors
@@ -21,4 +22,5 @@ public:
     static hrtime execution_start_time;
 };
 
+}
 #endif

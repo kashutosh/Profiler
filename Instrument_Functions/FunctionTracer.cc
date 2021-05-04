@@ -6,23 +6,25 @@
 #include "LinkedListOfFrames.h"
 #include "Aggregate_Stacks.h"
 
-using namespace FlightRecorder;
-
+FlightRecorder::Hashtable h;
 hrtime gethrtime(void);
+int initialization_complete = 0;
+namespace FlightRecorder{
+
 
 FILE * FunctionTracer::fp;
 FILE * FunctionTracer::fptext;
 int FunctionTracer::id [NUM_BUCKETS_PRIME] = {0};
 float FunctionTracer::clock_speed = 2.0;
 extern Stack stacks[NUM_BUCKETS_PRIME];
-int initialization_complete = 0;
 hrtime FunctionTracer::execution_start_time = 0;
+
 
 bool FunctionTracer::initializeTracer(float clock_speed_, void *caller_ptr) {
     extern Stack s;
     extern int initialization_complete;
 
-    FlightRecorder::initializeBuckets();
+    h.initializeBuckets();
     FlightRecorder::initializeLinkedLists();
 
     // Open the file handle and start writing a graph into it
@@ -66,10 +68,10 @@ bool FunctionTracer::initializeTracer(float clock_speed_, void *caller_ptr) {
     f->operation = PUSH;
 
 
-    int idx = FlightRecorder::find(threadid);
+    int idx = h.find(threadid);
     if (idx == -1 ) {
         printf("Found that threadid %d does not exist in hashtable when pushing a frame\n", threadid);
-        idx = FlightRecorder::insert(threadid);
+        idx = h.insert(threadid);
         printf("Result of insert operation is: Threadid:%d, Index:%d\n", threadid, idx);
     }
 
@@ -79,7 +81,7 @@ bool FunctionTracer::initializeTracer(float clock_speed_, void *caller_ptr) {
 
     execution_start_time = start_time;
 
-    initialization_complete = 1;
+    ::initialization_complete = 1;
     return true;
 }
 
@@ -105,7 +107,7 @@ bool FunctionTracer::stopTracer(void *caller_ptr) {
     fpop->end_time = end_time;
     fpop->operation = POP;
 
-    int idx = FlightRecorder::find(threadid);
+    int idx = h.find(threadid);
     FlightRecorder::appendNodeToTailOfAList(fpop, idx);
 
 
@@ -123,8 +125,8 @@ bool FunctionTracer::stopTracer(void *caller_ptr) {
 
     FlightRecorder::aggregateStacks();
 
-    printf("Number of stacks created were %d\n", FlightRecorder::getNumKeysStored());
+    printf("Number of stacks created were %d\n", h.getNumKeysStored());
     return true;
 }
  
-
+}

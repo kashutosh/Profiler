@@ -1,23 +1,16 @@
 #include "hashtable.h"
 
 namespace FlightRecorder {
-//Notice that this is a global hashtable,
-// limited by its namespace only. Requires C++
-
-static Bucket hashtable[NUM_BUCKETS_PRIME];
-// This lock is to be used only when modifying the hashtable
-// which is very rare anyway
-pthread_mutex_t hashtable_lock;
-
-int initializeBuckets() {
+int Hashtable::initializeBuckets() {
     //printf("Initializing buckets \n");
     for (int i=0; i<NUM_BUCKETS_PRIME; i++) {
         hashtable[i].chain = NULL;
     }
+    hashtable_idx = -1;
     return 0;
 }
 
-Bucket *getBucket(int index) {
+Hashtable::Bucket * Hashtable::getBucket(int index) {
     if (index > NUM_BUCKETS_PRIME || index <0) return NULL;
     return &hashtable[index];
 }
@@ -25,11 +18,11 @@ Bucket *getBucket(int index) {
 // abs is used to convert -ve numbers to +ve
 // earlier, uints were used but they are quite 
 // tricky to handle
-int hash(int key) {
+int  Hashtable::hash(int key) {
     return abs(key%NUM_BUCKETS_PRIME);
 }
 
-int printHashTable() {
+int Hashtable::printHashTable() {
     //printf("Printing hashtable \n");
     for (int i=0; i<NUM_BUCKETS_PRIME; i++) {
         Node *chain = hashtable[i].chain;
@@ -44,11 +37,11 @@ int printHashTable() {
     return 0;
 }
 
-int find(int key) {
+int Hashtable::find(int key) {
 
     // Find hash key and search in this hash key if this hashtable_idx exists
 
-    int hash_value = FlightRecorder::hash(key);
+    int hash_value = hash(key);
     //printf("hash value for %d is %u\n", key, hash_value);
     Bucket *bucket = &hashtable[hash_value];
     if (bucket->chain == NULL ){
@@ -71,13 +64,13 @@ int find(int key) {
 
 }
 
-int insert (int key) {
-    int hash_value = FlightRecorder::hash(key);
+int Hashtable::insert (int key) {
+    int hash_value = hash(key);
 
     pthread_mutex_lock(&hashtable_lock);
     // When inserting, always do a find first and iff it returns
     // false, then only insert. Otherwise return
-    int found_idx = FlightRecorder::find(key);
+    int found_idx = find(key);
     if (found_idx != -1) {
         printf ("Found that the key was already inserted at %u\n", found_idx);
         pthread_mutex_unlock(&hashtable_lock);
@@ -120,7 +113,7 @@ int insert (int key) {
     return hashtable_idx;
     
 }
-int getNumKeysStored() {
+int Hashtable::getNumKeysStored() {
     int counter = 0;
     for (int i=0; i<NUM_BUCKETS_PRIME; i++) {
         Node *chain = hashtable[i].chain;
@@ -134,7 +127,7 @@ int getNumKeysStored() {
     return counter;
 }
 
-int destroyHashtable() {
+int Hashtable::destroyHashtable() {
     pthread_mutex_lock(&hashtable_lock);
     int total_nodes_deleted = 0;
     // Go on freeing up nodes allocated. Err, how?
@@ -154,7 +147,7 @@ int destroyHashtable() {
     return 0;
 }
 
-int deleteNodesRecursively(Node *node) {
+int Hashtable::deleteNodesRecursively(Node *node) {
     int count = 0;
     if (node->next != NULL) {
         count = deleteNodesRecursively(node->next);

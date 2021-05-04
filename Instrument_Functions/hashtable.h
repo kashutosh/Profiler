@@ -5,6 +5,8 @@
 #define NUM_BUCKETS_PRIME 71
 
 namespace FlightRecorder {
+
+struct Hashtable {
 struct Node{
     int key;
     int hash_value;
@@ -28,7 +30,19 @@ struct Bucket{
 
 typedef struct Node Node;
 typedef struct Bucket Bucket;
-static int hashtable_idx = -1;
+int hashtable_idx;
+
+
+//Notice that this is a global hashtable,
+// limited by its namespace only. Requires C++
+
+Bucket hashtable[NUM_BUCKETS_PRIME];
+
+// This lock is to be used only when modifying the hashtable
+// which is very rare anyway
+pthread_mutex_t hashtable_lock;
+
+
 
 /** 
 * All functions below are declared no_instrument_function 
@@ -66,4 +80,6 @@ Bucket *getBucket(int index) __attribute__((no_instrument_function));
 
 
 int deleteNodesRecursively(Node *node) __attribute__((no_instrument_function));
+}; // end struct
+
 }

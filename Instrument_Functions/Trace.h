@@ -1,12 +1,15 @@
 #ifndef TRACE_H
 #define TRACE_H
 
+
 #include <stdio.h>
 #include <dlfcn.h>
 #include <iostream>
 #include <stdlib.h>
 #include <pthread.h>
 #include <string.h>
+
+
 
 #define PUSH 1
 #define POP 0
@@ -91,6 +94,5 @@ class Stack {
 
 
 };
-
 
 #endif

@@ -6,6 +6,7 @@
 #include <pthread.h>
 
 using namespace std;
+using namespace FlightRecorder;
 extern int global;
 void callout();
 
